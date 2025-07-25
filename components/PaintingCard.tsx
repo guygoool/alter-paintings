@@ -67,11 +67,6 @@ export default function PaintingCard({ painting, onSelect }: PaintingCardProps) 
         {painting.year && (
           <p className="text-sm text-neutral-600 mb-2">{painting.year}</p>
         )}
-        {painting.description && (
-          <p className="text-sm text-neutral-700 line-clamp-2 leading-relaxed">
-            {painting.description}
-          </p>
-        )}
         {painting.medium && (
           <p className="text-xs text-neutral-500 mt-2 italic">{painting.medium}</p>
         )}

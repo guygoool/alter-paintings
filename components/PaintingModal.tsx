@@ -73,15 +73,6 @@ export default function PaintingModal({ painting, isOpen, onClose }: PaintingMod
                 )}
               </div>
 
-              {painting.description && (
-                <div>
-                  <h3 className="font-semibold text-neutral-800 mb-2">About this work</h3>
-                  <p className="text-neutral-700 leading-relaxed">
-                    {painting.description}
-                  </p>
-                </div>
-              )}
-
               <div className="space-y-3 text-sm">
                 {painting.medium && (
                   <div>
@@ -99,21 +90,6 @@ export default function PaintingModal({ painting, isOpen, onClose }: PaintingMod
                   </div>
                 )}
 
-                {painting.tags && painting.tags.length > 0 && (
-                  <div>
-                    <span className="font-semibold text-neutral-800 block mb-2">Tags:</span>
-                    <div className="flex flex-wrap gap-2">
-                      {painting.tags.map((tag, index) => (
-                        <span 
-                          key={index}
-                          className="px-2 py-1 bg-neutral-100 text-neutral-700 rounded-full text-xs"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
           </div>

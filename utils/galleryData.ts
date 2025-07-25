@@ -6,110 +6,100 @@ export const realPaintings: Painting[] = [
     title: 'The Alley',
     year: 1965,
     imageUrl: '/images/alley.jpeg',
-    altText: 'A painting of a narrow alley with architectural details and human presence',
-    description: 'A narrow passage between buildings, capturing the intimate spaces of urban life where community and solitude intersect.',
+    altText: '1965',
     dimensions: { width: 45, height: 35, unit: 'cm' },
     medium: 'Oil on canvas',
-    tags: ['urban', 'architecture', 'community', 'solitude']
+    tags: []
   },
   {
     id: 2,
     title: 'Evening',
     year: 1968,
     imageUrl: '/images/evening.jpeg',
-    altText: 'An evening scene with soft lighting and contemplative atmosphere',
-    description: 'The quiet contemplation of dusk, when day transitions to night and memories surface in the gentle light.',
+    altText: '1968',
     dimensions: { width: 50, height: 40, unit: 'cm' },
     medium: 'Oil on canvas',
-    tags: ['evening', 'contemplation', 'light', 'memory']
+    tags: []
   },
   {
     id: 3,
     title: 'Hope',
     year: 1970,
     imageUrl: '/images/hope.jpeg',
-    altText: 'A painting expressing hope through color and composition',
-    description: 'A testament to the resilience of the human spirit, painted with uplifting colors that speak to renewal and possibility.',
+    altText: '1970',
     dimensions: { width: 55, height: 42, unit: 'cm' },
     medium: 'Oil on canvas',
-    tags: ['hope', 'resilience', 'renewal', 'spirit']
+    tags: []
   },
   {
     id: 4,
     title: 'Jaffa',
     year: 1963,
     imageUrl: '/images/jaffa.jpeg',
-    altText: 'A view of Jaffa showing the historic port city with its distinctive architecture',
-    description: 'The ancient port city of Jaffa, where old and new worlds meet, captured with the artist\'s keen eye for cultural intersection.',
+    altText: '1963',
     dimensions: { width: 48, height: 38, unit: 'cm' },
     medium: 'Oil on canvas',
-    tags: ['jaffa', 'port', 'history', 'culture', 'israel']
+    tags: []
   },
   {
     id: 5,
     title: 'Jerusalem',
     year: 1967,
     imageUrl: '/images/jerusalem.jpeg',
-    altText: 'A painting of Jerusalem showing the city\'s sacred and historical character',
-    description: 'The eternal city painted with reverence and depth, capturing both its spiritual significance and lived reality.',
+    altText: '1967',
     dimensions: { width: 52, height: 41, unit: 'cm' },
     medium: 'Oil on canvas',
-    tags: ['jerusalem', 'sacred', 'history', 'spirituality', 'israel']
+    tags: []
   },
   {
     id: 6,
     title: 'Kurdish Heritage',
     year: 1969,
     imageUrl: '/images/kurdit.jpeg',
-    altText: 'A painting depicting Kurdish cultural elements and heritage',
-    description: 'A celebration of Kurdish culture and traditions, painted with respect for the rich heritage of this ancient people.',
+    altText: '1969',
     dimensions: { width: 46, height: 36, unit: 'cm' },
     medium: 'Oil on canvas',
-    tags: ['kurdish', 'heritage', 'culture', 'tradition']
+    tags: []
   },
   {
     id: 7,
     title: 'The Market',
     year: 1964,
     imageUrl: '/images/market.jpeg',
-    altText: 'A bustling market scene with people and goods',
-    description: 'The vibrant life of the marketplace, where community gathers and stories are shared over commerce and conversation.',
+    altText: '1964',
     dimensions: { width: 49, height: 39, unit: 'cm' },
     medium: 'Oil on canvas',
-    tags: ['market', 'community', 'commerce', 'social']
+    tags: []
   },
   {
     id: 8,
     title: 'Remembrance',
     year: 1972,
     imageUrl: '/images/remembrence.jpeg',
-    altText: 'A contemplative painting about memory and remembrance',
-    description: 'A deeply personal work of memory and mourning, honoring those who were lost while affirming the importance of remembering.',
+    altText: '1972',
     dimensions: { width: 53, height: 43, unit: 'cm' },
     medium: 'Oil on canvas',
-    tags: ['remembrance', 'memory', 'mourning', 'honor']
+    tags: []
   },
   {
     id: 9,
     title: 'The Scholar',
     year: 1966,
     imageUrl: '/images/scholar.jpeg',
-    altText: 'A painting of a scholarly figure engaged in study or contemplation',
-    description: 'A portrait of learning and wisdom, celebrating the pursuit of knowledge that sustained so many through dark times.',
+    altText: '1966',
     dimensions: { width: 44, height: 34, unit: 'cm' },
     medium: 'Oil on canvas',
-    tags: ['scholar', 'learning', 'wisdom', 'knowledge']
+    tags: []
   },
   {
     id: 10,
     title: 'Sunset',
     year: 1971,
     imageUrl: '/images/sunset.jpeg',
-    altText: 'A sunset scene with warm colors and peaceful atmosphere',
-    description: 'The day\'s end painted with warmth and reflection, a moment of peace and beauty that speaks to life\'s enduring grace.',
+    altText: '1971',
     dimensions: { width: 47, height: 37, unit: 'cm' },
     medium: 'Oil on canvas',
-    tags: ['sunset', 'peace', 'reflection', 'beauty']
+    tags: []
   }
 ];
 
@@ -140,7 +130,6 @@ export const generatePlaceholderPaintings = (count: number): Painting[] => {
   ];
   
   const mediums = ['Oil on canvas', 'Watercolor', 'Mixed media', 'Acrylic on board'];
-  const tags = ['memory', 'hope', 'community', 'family', 'nature', 'spirituality', 'resilience', 'history', 'survival', 'renewal'];
 
   return Array.from({ length: count }, (_, i) => {
     const themeIndex = i % themes.length;
@@ -153,15 +142,14 @@ export const generatePlaceholderPaintings = (count: number): Painting[] => {
       title: themes[themeIndex] + (seriesNumber > 1 ? ` ${seriesNumber}` : ''),
       year: baseYear + Math.floor((i / count) * yearRange),
       imageUrl: `/images/placeholder-${(i % 10) + 1}.jpg`,
-      altText: `Painting titled ${themes[themeIndex]} expressing artistic interpretation of human experience and memory`,
-      description: `A profound work exploring themes of ${themes[themeIndex].toLowerCase()}, painted with the deep understanding that comes from lived experience.`,
+      altText: `${baseYear + Math.floor((i / count) * yearRange)}`,
       dimensions: {
         width: 35 + Math.floor(Math.random() * 25),
         height: 28 + Math.floor(Math.random() * 22),
         unit: 'cm' as const
       },
       medium: mediums[i % mediums.length],
-      tags: tags.slice(Math.floor(i / 5) % 3, (Math.floor(i / 5) % 3) + 3 + Math.floor(Math.random() * 2))
+      tags: []
     };
   });
 };

@@ -4,7 +4,6 @@ import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { useRef, useMemo } from 'react';
 import { Painting } from '@/types';
 import PaintingFrame from './PaintingFrame';
-import { useScrollTrigger } from '@/hooks/useScrollTrigger';
 import { ParallaxBackground, ParallaxDecorations } from './ParallaxBackground';
 
 interface GallerySectionProps {
@@ -44,22 +43,6 @@ const itemVariants = {
   },
 };
 
-const headerVariants = {
-  hidden: { 
-    opacity: 0, 
-    y: 60,
-  },
-  visible: { 
-    opacity: 1, 
-    y: 0,
-    transition: {
-      type: 'spring' as const,
-      damping: 20,
-      stiffness: 100,
-      duration: 1,
-    },
-  },
-};
 
 const statisticVariants = {
   hidden: { 
@@ -97,10 +80,6 @@ export default function GallerySection({ paintings, onSelectPainting }: GalleryS
   const backgroundScale = useTransform(smoothProgress, [0, 1], [1, 1.1]);
   const backgroundOpacity = useTransform(smoothProgress, [0, 0.3, 0.7, 1], [0.3, 0.5, 0.5, 0.2]);
 
-  const { elementRef: titleRef, isIntersecting: titleInView } = useScrollTrigger({
-    threshold: 0.3,
-    rootMargin: '-50px',
-  });
 
   // Sophisticated layout patterns for visual rhythm
   const getLayoutPattern = useMemo(() => {
@@ -119,7 +98,7 @@ export default function GallerySection({ paintings, onSelectPainting }: GalleryS
   }, []);
 
   return (
-    <div ref={containerRef} className="relative min-h-screen bg-gallery-50 paper-bg overflow-hidden">
+    <div ref={containerRef} className="relative min-h-screen bg-gallery-50 paper-bg overflow-hidden mt-[140px]">
       {/* Advanced Parallax Background */}
       <motion.div
         style={{ 
@@ -167,89 +146,9 @@ export default function GallerySection({ paintings, onSelectPainting }: GalleryS
       </motion.div>
 
       <div className="relative z-10">
-        {/* Enhanced Section Header */}
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20">
-          <motion.div
-            ref={titleRef}
-            variants={headerVariants}
-            initial="hidden"
-            animate={titleInView ? "visible" : "hidden"}
-            className="text-center max-w-5xl mx-auto"
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={titleInView ? { opacity: 1, scale: 1 } : {}}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="mb-8"
-            >
-              <h2 className="gallery-title text-4xl md:text-6xl lg:text-7xl mb-6 bg-gradient-to-r from-artist-brown via-artist-brown-light to-artist-brown bg-clip-text text-transparent">
-                The Complete Collection
-              </h2>
-              <div className="flex items-center justify-center space-x-4 mb-8">
-                <motion.div 
-                  className="w-16 h-px bg-museum-bronze"
-                  initial={{ scaleX: 0 }}
-                  animate={titleInView ? { scaleX: 1 } : {}}
-                  transition={{ duration: 0.8, delay: 0.4 }}
-                />
-                <motion.div 
-                  className="w-3 h-3 bg-museum-gold rounded-full"
-                  initial={{ scale: 0 }}
-                  animate={titleInView ? { scale: 1 } : {}}
-                  transition={{ duration: 0.4, delay: 0.6 }}
-                />
-                <motion.div 
-                  className="w-24 h-px bg-museum-bronze"
-                  initial={{ scaleX: 0 }}
-                  animate={titleInView ? { scaleX: 1 } : {}}
-                  transition={{ duration: 0.8, delay: 0.4 }}
-                />
-                <motion.div 
-                  className="w-3 h-3 bg-museum-gold rounded-full"
-                  initial={{ scale: 0 }}
-                  animate={titleInView ? { scale: 1 } : {}}
-                  transition={{ duration: 0.4, delay: 0.8 }}
-                />
-                <motion.div 
-                  className="w-16 h-px bg-museum-bronze"
-                  initial={{ scaleX: 0 }}
-                  animate={titleInView ? { scaleX: 1 } : {}}
-                  transition={{ duration: 0.8, delay: 0.4 }}
-                />
-              </div>
-            </motion.div>
-            
-            <motion.p 
-              initial={{ opacity: 0, y: 30 }}
-              animate={titleInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="gallery-subtitle text-xl md:text-2xl lg:text-3xl mb-12"
-            >
-              Fifty works spanning three decades of artistic expression
-            </motion.p>
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 40 }}
-              animate={titleInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.8 }}
-              className="gallery-body text-lg md:text-xl leading-relaxed space-y-6 max-w-4xl mx-auto"
-            >
-              <p className="text-artist-brown-light">
-                Each painting in this collection represents a moment in time, a memory preserved, 
-                or an emotion transformed into visual poetry. Alter Metzger&apos;s work evolved from 
-                documentary realism to abstract expressions of hope and healing.
-              </p>
-              <p className="text-artist-warm-gray">
-                These works serve as both artistic achievements and historical documents, 
-                ensuring that stories of survival, resilience, and the triumph of the human 
-                spirit continue to inspire future generations.
-              </p>
-            </motion.div>
-          </motion.div>
-        </div>
 
         {/* Sophisticated Paintings Grid with Staggered Animations */}
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-32">
+        <div>
           <motion.div 
             variants={containerVariants}
             initial="hidden"
@@ -345,7 +244,7 @@ export default function GallerySection({ paintings, onSelectPainting }: GalleryS
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 1, ease: "easeOut" }}
           viewport={{ once: true }}
-          className="container mx-auto px-4 sm:px-6 lg:px-8 pb-32"
+          className=""
         >
           <div className="relative overflow-hidden rounded-2xl">
             {/* Glass morphism background */}

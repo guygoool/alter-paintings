@@ -117,32 +117,8 @@ export default function PaintingFrame({
               transition={{ delay: 0.1 }}
               className="text-white"
             >
-              <h3 className="font-crimson font-semibold text-xl mb-2 line-clamp-2">
-                {painting.title}
-              </h3>
-              
-              <div className="flex items-center space-x-4 text-sm mb-3">
-                {painting.year && (
-                  <span className="text-gallery-200">{painting.year}</span>
-                )}
-                {painting.medium && (
-                  <>
-                    <span className="w-1 h-1 bg-gallery-300 rounded-full" />
-                    <span className="text-gallery-300">{painting.medium}</span>
-                  </>
-                )}
-              </div>
-
-              {painting.description && (
-                <p className="text-gallery-100 text-sm leading-relaxed line-clamp-3">
-                  {painting.description}
-                </p>
-              )}
-
-              {painting.dimensions && (
-                <p className="text-gallery-400 text-xs mt-2">
-                  {painting.dimensions.width} × {painting.dimensions.height} {painting.dimensions.unit}
-                </p>
+              {painting.year && (
+                <span className="text-gallery-200 text-xl font-medium">{painting.year}</span>
               )}
             </motion.div>
           </div>
@@ -160,20 +136,8 @@ export default function PaintingFrame({
           transition={{ duration: 0.6, delay: index * 0.1 + 0.3 }}
           className="absolute -bottom-12 left-4 right-4 bg-gallery-50 border border-gallery-200 p-3 rounded-sm shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300"
         >
-          <h4 className="font-crimson font-medium text-artist-brown text-sm mb-1">
-            {painting.title}
-          </h4>
-          <div className="flex items-center justify-between text-xs text-artist-warm-gray">
-            <span>{painting.year || 'Date unknown'}</span>
-            {painting.tags && painting.tags.length > 0 && (
-              <div className="flex space-x-1">
-                {painting.tags.slice(0, 2).map((tag, i) => (
-                  <span key={i} className="bg-gallery-100 px-2 py-1 rounded-full text-xs">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
+          <div className="text-center text-artist-brown text-sm font-medium">
+            {painting.year || 'Date unknown'}
           </div>
         </motion.div>
       </motion.div>
