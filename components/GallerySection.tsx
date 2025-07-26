@@ -149,13 +149,13 @@ export default function GallerySection({ paintings, onSelectPainting }: GalleryS
 
         {/* Sophisticated Paintings Grid with Staggered Animations */}
         <div>
-          <motion.div 
+            <motion.div 
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
-            className="space-y-24 md:space-y-32 lg:space-y-40"
-          >
+            viewport={{ once: true, margin: '-200px' }}
+            className="space-y-24 md:space-y-32 lg:space-y-40 mt-[200px]"
+            >
             {paintings.map((painting, index) => {
               const { layout, size, featured } = getLayoutPattern(index);
               
@@ -163,74 +163,74 @@ export default function GallerySection({ paintings, onSelectPainting }: GalleryS
                 <motion.div
                   key={painting.id}
                   variants={itemVariants}
-                  className="relative gpu-accelerated"
+                  className="relative gpu-accelerated px-[100px]"
                   custom={index}
                 >
                   {/* Enhanced background decoration for featured paintings */}
                   {featured && (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 1.2, delay: 0.3 }}
-                      viewport={{ once: true }}
-                      className="absolute inset-0 -z-10 transform -translate-x-8 -translate-y-8 translate-x-8 translate-y-8"
-                    >
-                      <div className="absolute inset-0 bg-gradient-radial from-museum-gold/10 via-museum-bronze/5 to-transparent rounded-3xl blur-xl" />
-                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-px bg-gradient-to-r from-transparent via-museum-gold/30 to-transparent" />
-                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-px h-full bg-gradient-to-b from-transparent via-museum-gold/30 to-transparent" />
-                    </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 1.2, delay: 0.3 }}
+                    viewport={{ once: true }}
+                    className="absolute inset-0 -z-10 transform -translate-x-8 -translate-y-8 translate-x-8 translate-y-8"
+                  >
+                    <div className="absolute inset-0 bg-gradient-radial from-museum-gold/10 via-museum-bronze/5 to-transparent rounded-3xl blur-xl" />
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-px bg-gradient-to-r from-transparent via-museum-gold/30 to-transparent" />
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-px h-full bg-gradient-to-b from-transparent via-museum-gold/30 to-transparent" />
+                  </motion.div>
                   )}
 
                   <PaintingFrame
-                    painting={painting}
-                    layout={layout}
-                    size={size}
-                    index={index}
-                    onSelect={onSelectPainting}
+                  painting={painting}
+                  layout={layout}
+                  size={size}
+                  index={index}
+                  onSelect={onSelectPainting}
                   />
 
                   {/* Elegant section dividers */}
                   {index < paintings.length - 1 && (index + 1) % 8 === 0 && (
-                    <motion.div
-                      initial={{ opacity: 0, scaleX: 0 }}
-                      whileInView={{ opacity: 1, scaleX: 1 }}
-                      transition={{ duration: 1.2, delay: 0.5, ease: "easeOut" }}
-                      viewport={{ once: true }}
-                      className="flex justify-center mt-24 lg:mt-32"
-                    >
-                      <div className="flex items-center space-x-6">
-                        <motion.div 
-                          className="w-20 h-px bg-gradient-to-r from-transparent via-museum-bronze to-transparent"
-                          initial={{ scaleX: 0 }}
-                          whileInView={{ scaleX: 1 }}
-                          transition={{ duration: 0.8, delay: 0.7 }}
-                        />
-                        <motion.div 
-                          className="w-4 h-4 bg-museum-gold rounded-full shadow-inner-glow"
-                          initial={{ scale: 0, rotate: 0 }}
-                          whileInView={{ scale: 1, rotate: 360 }}
-                          transition={{ duration: 0.6, delay: 0.9 }}
-                        />
-                        <motion.div 
-                          className="w-32 h-px bg-gradient-to-r from-transparent via-museum-bronze to-transparent"
-                          initial={{ scaleX: 0 }}
-                          whileInView={{ scaleX: 1 }}
-                          transition={{ duration: 1, delay: 0.8 }}
-                        />
-                        <motion.div 
-                          className="w-4 h-4 bg-museum-gold rounded-full shadow-inner-glow"
-                          initial={{ scale: 0, rotate: 0 }}
-                          whileInView={{ scale: 1, rotate: -360 }}
-                          transition={{ duration: 0.6, delay: 1.1 }}
-                        />
-                        <motion.div 
-                          className="w-20 h-px bg-gradient-to-r from-transparent via-museum-bronze to-transparent"
-                          initial={{ scaleX: 0 }}
-                          whileInView={{ scaleX: 1 }}
-                          transition={{ duration: 0.8, delay: 1 }}
-                        />
-                      </div>
-                    </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, scaleX: 0 }}
+                    whileInView={{ opacity: 1, scaleX: 1 }}
+                    transition={{ duration: 1.2, delay: 0.5, ease: "easeOut" }}
+                    viewport={{ once: true }}
+                    className="flex justify-center mt-24 lg:mt-32"
+                  >
+                    <div className="flex items-center space-x-6">
+                    <motion.div 
+                      className="w-20 h-px bg-gradient-to-r from-transparent via-museum-bronze to-transparent"
+                      initial={{ scaleX: 0 }}
+                      whileInView={{ scaleX: 1 }}
+                      transition={{ duration: 0.8, delay: 0.7 }}
+                    />
+                    <motion.div 
+                      className="w-4 h-4 bg-museum-gold rounded-full shadow-inner-glow"
+                      initial={{ scale: 0, rotate: 0 }}
+                      whileInView={{ scale: 1, rotate: 360 }}
+                      transition={{ duration: 0.6, delay: 0.9 }}
+                    />
+                    <motion.div 
+                      className="w-32 h-px bg-gradient-to-r from-transparent via-museum-bronze to-transparent"
+                      initial={{ scaleX: 0 }}
+                      whileInView={{ scaleX: 1 }}
+                      transition={{ duration: 1, delay: 0.8 }}
+                    />
+                    <motion.div 
+                      className="w-4 h-4 bg-museum-gold rounded-full shadow-inner-glow"
+                      initial={{ scale: 0, rotate: 0 }}
+                      whileInView={{ scale: 1, rotate: -360 }}
+                      transition={{ duration: 0.6, delay: 1.1 }}
+                    />
+                    <motion.div 
+                      className="w-20 h-px bg-gradient-to-r from-transparent via-museum-bronze to-transparent"
+                      initial={{ scaleX: 0 }}
+                      whileInView={{ scaleX: 1 }}
+                      transition={{ duration: 0.8, delay: 1 }}
+                    />
+                    </div>
+                  </motion.div>
                   )}
                 </motion.div>
               );
