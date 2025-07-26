@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Painting } from '@/types';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
@@ -23,16 +23,47 @@ export default function PaintingFrame({
 }: PaintingFrameProps) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [naturalDimensions, setNaturalDimensions] = useState<{width: number, height: number} | null>(null);
   const { elementRef, isIntersecting } = useIntersectionObserver({
     threshold: 0.3,
     rootMargin: '-50px',
   });
 
-  const sizeClasses = {
-    small: 'w-64 h-80',
-    medium: 'w-80 h-96',
-    large: 'w-96 h-112'
+  const calculateDimensions = (size: 'small' | 'medium' | 'large') => {
+    // Use natural image dimensions if available, otherwise fall back to metadata
+    const dimensions = naturalDimensions || painting.dimensions;
+    
+    if (!dimensions) {
+      return {
+        small: { width: 256, height: 320 },
+        medium: { width: 320, height: 384 },
+        large: { width: 384, height: 448 }
+      }[size];
+    }
+
+    const aspectRatio = dimensions.width / dimensions.height;
+    const baseSizes = {
+      small: 280,
+      medium: 350,
+      large: 420
+    };
+
+    const baseSize = baseSizes[size];
+    
+    if (aspectRatio > 1) {
+      return {
+        width: baseSize,
+        height: Math.round(baseSize / aspectRatio)
+      };
+    } else {
+      return {
+        width: Math.round(baseSize * aspectRatio),
+        height: baseSize
+      };
+    }
   };
+
+  const frameDimensions = useMemo(() => calculateDimensions(size), [size, naturalDimensions]);
 
   const layoutClasses = {
     left: 'justify-start',
@@ -40,7 +71,15 @@ export default function PaintingFrame({
     center: 'justify-center'
   };
 
-  const handleImageLoad = () => setImageLoaded(true);
+  const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>) => {
+    const img = event.currentTarget;
+    setNaturalDimensions({
+      width: img.naturalWidth,
+      height: img.naturalHeight
+    });
+    setImageLoaded(true);
+  };
+  
   const handleImageError = () => {
     setImageError(true);
     setImageLoaded(true);
@@ -71,11 +110,13 @@ export default function PaintingFrame({
           rotate: 0,
           transition: { duration: 0.3 }
         }}
-        className={`group cursor-pointer museum-frame ${sizeClasses[size]} transition-all duration-300 hover:shadow-painting`}
-        onClick={() => onSelect(painting)}
+        className="group cursor-pointer museum-frame transition-all duration-300 hover:shadow-painting"
         style={{
+          width: `${frameDimensions.width}px`,
+          height: `${frameDimensions.height}px`,
           transform: `rotate(${layout === 'left' ? '2deg' : layout === 'right' ? '-2deg' : '0deg'})`,
         }}
+        onClick={() => onSelect(painting)}
       >
         <div className="painting-content h-full relative overflow-hidden">
           {!imageError ? (
