@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Painting } from '@/types';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
@@ -24,10 +24,22 @@ export default function PaintingFrame({
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [naturalDimensions, setNaturalDimensions] = useState<{width: number, height: number} | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
   const { elementRef, isIntersecting } = useIntersectionObserver({
     threshold: 0.3,
     rootMargin: '-50px',
   });
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+    
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
 
   const calculateDimensions = (size: 'small' | 'medium' | 'large') => {
     // Use natural image dimensions if available, otherwise fall back to metadata
@@ -42,7 +54,13 @@ export default function PaintingFrame({
     }
 
     const aspectRatio = dimensions.width / dimensions.height;
-    const baseSizes = {
+    
+    // Responsive base sizes - smaller on mobile
+    const baseSizes = isMobile ? {
+      small: 200,
+      medium: 260,
+      large: 320
+    } : {
       small: 280,
       medium: 350,
       large: 420
@@ -63,7 +81,7 @@ export default function PaintingFrame({
     }
   };
 
-  const frameDimensions = useMemo(() => calculateDimensions(size), [size, naturalDimensions]);
+  const frameDimensions = useMemo(() => calculateDimensions(size), [size, naturalDimensions, isMobile]);
 
   const layoutClasses = {
     left: 'justify-start',
