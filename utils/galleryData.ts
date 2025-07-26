@@ -119,37 +119,18 @@ Each painting serves as both historical document and artistic expression, create
   paintings: realPaintings
 };
 
-export const generatePlaceholderPaintings = (count: number): Painting[] => {
-  const themes = [
-    'Childhood Memories', 'The Journey', 'New Beginnings', 'Fragments of Time',
-    'Silence and Sound', 'Colors of Hope', 'Shadows and Light', 'Letters Never Sent',
-    'The Garden', 'Faces Remembered', 'Morning Prayer', 'Evening Reflections',
-    'Warsaw Streets', 'Liberation', 'Rebuilding', 'Family Portrait', 'Sacred Rituals',
-    'Village Life', 'Survivors', 'Testament', 'Resilience', 'Tomorrow', 'Heritage',
-    'Dignity', 'Community', 'Wisdom', 'Faith', 'Courage', 'Unity', 'Reflection'
-  ];
+export const generateLoopedPaintings = (count: number): Painting[] => {
+  const realPaintingsCount = realPaintings.length;
   
-  const mediums = ['Oil on canvas', 'Watercolor', 'Mixed media', 'Acrylic on board'];
-
   return Array.from({ length: count }, (_, i) => {
-    const themeIndex = i % themes.length;
-    const seriesNumber = Math.floor(i / themes.length) + 1;
-    const baseYear = 1950;
-    const yearRange = 30;
+    const realPaintingIndex = i % realPaintingsCount;
+    const originalPainting = realPaintings[realPaintingIndex];
+    const loopNumber = Math.floor(i / realPaintingsCount) + 1;
     
     return {
+      ...originalPainting,
       id: 11 + i,
-      title: themes[themeIndex] + (seriesNumber > 1 ? ` ${seriesNumber}` : ''),
-      year: baseYear + Math.floor((i / count) * yearRange),
-      imageUrl: `/images/placeholder-${(i % 10) + 1}.jpg`,
-      altText: `${baseYear + Math.floor((i / count) * yearRange)}`,
-      dimensions: {
-        width: 35 + Math.floor(Math.random() * 25),
-        height: 28 + Math.floor(Math.random() * 22),
-        unit: 'cm' as const
-      },
-      medium: mediums[i % mediums.length],
-      tags: []
+      title: loopNumber > 1 ? `${originalPainting.title} (${loopNumber})` : originalPainting.title
     };
   });
 };

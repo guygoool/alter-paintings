@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { alterMetzgerGallery, generatePlaceholderPaintings } from '@/utils/galleryData';
+import { alterMetzgerGallery, generateLoopedPaintings } from '@/utils/galleryData';
 import HeroSection from '@/components/HeroSection';
 import GallerySection from '@/components/GallerySection';
 import PaintingModal from '@/components/PaintingModal';
@@ -10,7 +10,7 @@ import { Painting } from '@/types';
 
 const allPaintings = [
   ...alterMetzgerGallery.paintings,
-  ...generatePlaceholderPaintings(40)
+  ...generateLoopedPaintings(40)
 ];
 
 export default function Home() {
