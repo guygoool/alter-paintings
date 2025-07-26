@@ -78,6 +78,29 @@ The gallery system is built around these core types:
 - Responsive image sizing based on painting dimensions
 - Spring physics with restDelta optimization for smooth animations
 
-### Memorial Context
+### Design Atmosphere & Philosophy
 
+**Memorial Context:**
 This application serves as a digital memorial for Holocaust survivor Alter Metzger (1912-1984). The design emphasizes reverence, dignity, and preservation of memory through sophisticated visual presentation. All UI decisions prioritize respectful commemoration while maintaining accessibility and user experience.
+
+**Visual Atmosphere:**
+- **Gallery Elegance**: Clean, museum-quality presentation with generous whitespace
+- **Subtle Sophistication**: Muted color palette avoiding bright or jarring colors
+- **Respectful Minimalism**: UI elements should never compete with the artwork
+- **Warm Earth Tones**: Use `artist.*` colors (browns, sages, warm grays) for accents
+- **Premium Touches**: `museum.*` colors (gold, bronze, cream) for highlights and special elements
+- **Gentle Animations**: Smooth, graceful transitions that feel reverent rather than flashy
+
+**Interaction Philosophy:**
+- **Unobtrusive Controls**: Buttons and UI elements should blend seamlessly
+- **Click-anywhere Patterns**: Natural, intuitive interactions without visible affordances
+- **Escape Key Support**: Always provide keyboard accessibility for closing modals/overlays
+- **Fade Transitions**: Prefer gentle fade-in/fade-out over abrupt state changes
+- **Background Consistency**: Modal overlays should use `bg-gallery-50` to maintain atmosphere
+- **Transparent Overlays**: Use 80-90% opacity to maintain visual connection to the gallery
+
+**Content Presentation:**
+- **Artwork First**: Photos should be displayed without distracting metadata or chrome
+- **Full-screen Viewing**: Maximize image display area (95% viewport is ideal)
+- **Contextual Information**: Metadata should be available but not dominant
+- **Consistent Spacing**: Use the established grid and spacing patterns throughout
