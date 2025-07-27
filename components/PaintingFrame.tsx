@@ -81,7 +81,7 @@ export default function PaintingFrame({
     }
   };
 
-  const frameDimensions = useMemo(() => calculateDimensions(size), [size, naturalDimensions, isMobile]);
+  const frameDimensions = useMemo(() => calculateDimensions(size), [size, naturalDimensions, isMobile, painting.dimensions]);
 
   const layoutClasses = {
     left: 'justify-start',
@@ -125,13 +125,13 @@ export default function PaintingFrame({
           }
         }}
         whileHover={{ 
-          scale: 1.03,       // Reduced from 1.05 for subtler effect
+          scale: 1.02,       // Further reduced for even subtler effect
           rotate: 0,
           transition: { 
-            duration: 0.2,   // Faster hover response
+            duration: 0.15,  // Even faster hover response
             type: "spring",
-            damping: 20,
-            stiffness: 300,
+            damping: 25,
+            stiffness: 400,
             restDelta: 0.001
           }
         }}
@@ -150,7 +150,7 @@ export default function PaintingFrame({
                 src={painting.imageUrl}
                 alt={painting.altText}
                 fill
-                className={`object-cover transition-all duration-300 group-hover:scale-105 will-change-transform ${
+                className={`object-cover transition-all duration-200 group-hover:scale-103 will-change-transform ${
                   imageLoaded ? 'opacity-100' : 'opacity-0'
                 }`}
                 onLoad={handleImageLoad}

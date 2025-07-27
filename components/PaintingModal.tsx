@@ -20,7 +20,7 @@ export default function PaintingModal({ painting, isOpen, onClose }: PaintingMod
     setTimeout(() => {
       setIsClosing(false);
       onClose();
-    }, 200); // Reduced from 300ms for faster response
+    }, 150); // Further reduced for faster response
   };
 
   useEffect(() => {
@@ -52,14 +52,14 @@ export default function PaintingModal({ painting, isOpen, onClose }: PaintingMod
       document.removeEventListener('keydown', handleEscape);
       document.body.style.overflow = 'unset';
     };
-  }, [isOpen]);
+  }, [isOpen, handleClose]);
 
   if ((!isOpen && !isClosing) || !painting) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center animate-in fade-in duration-150">
       <div 
-        className="absolute inset-0 bg-gallery-50 bg-opacity-85 backdrop-blur-sm animate-in fade-in duration-200 will-change-opacity"
+        className="absolute inset-0 bg-gallery-50 bg-opacity-85 backdrop-blur-sm animate-in fade-in duration-150 will-change-opacity"
         onClick={handleClose}
       />
       
@@ -69,7 +69,7 @@ export default function PaintingModal({ painting, isOpen, onClose }: PaintingMod
           src={painting.imageUrl}
           alt={painting.altText}
           fill
-          className={`object-contain transition-opacity duration-200 ease-out will-change-opacity ${
+          className={`object-contain transition-opacity duration-150 ease-out will-change-opacity ${
             showImage ? 'opacity-100' : 'opacity-0'
           }`}
           sizes="95vw"
