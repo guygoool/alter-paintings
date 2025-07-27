@@ -195,10 +195,6 @@ export default function PaintingFrame({
             </motion.div>
           </div>
 
-          {/* Frame Number */}
-          <div className="absolute top-4 right-4 bg-museum-bronze text-gallery-50 px-2 py-1 rounded-sm text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            #{index + 1}
-          </div>
         </div>
 
         {/* Museum Label */}
