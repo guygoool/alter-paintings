@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { Painting } from '@/types';
 
@@ -20,7 +21,7 @@ export default function PaintingModal({ painting, isOpen, onClose }: PaintingMod
     setTimeout(() => {
       setIsClosing(false);
       onClose();
-    }, 150); // Further reduced for faster response
+    }, 300); // Increased to match animation duration
   };
 
   useEffect(() => {
@@ -37,7 +38,7 @@ export default function PaintingModal({ painting, isOpen, onClose }: PaintingMod
       // Trigger fade-in with shorter delay for faster response
       const timer = setTimeout(() => {
         setShowImage(true);
-      }, 50); // Reduced from 100ms
+      }, 100); // Slightly increased for smoother transition
       
       return () => {
         clearTimeout(timer);
@@ -57,25 +58,68 @@ export default function PaintingModal({ painting, isOpen, onClose }: PaintingMod
   if ((!isOpen && !isClosing) || !painting) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center animate-in fade-in duration-150">
-      <div 
-        className="absolute inset-0 bg-gallery-50 bg-opacity-85 backdrop-blur-sm animate-in fade-in duration-150 will-change-opacity"
-        onClick={handleClose}
-      />
-      
-      
-      <div className="relative w-[95vw] h-[95vh] pointer-events-none">
-        <Image
-          src={painting.imageUrl}
-          alt={painting.altText}
-          fill
-          className={`object-contain transition-opacity duration-150 ease-out will-change-opacity ${
-            showImage ? 'opacity-100' : 'opacity-0'
-          }`}
-          sizes="95vw"
-          priority
-        />
-      </div>
-    </div>
+    <AnimatePresence mode="wait">
+      {(isOpen || isClosing) && (
+        <motion.div 
+          className="fixed inset-0 z-50 flex items-center justify-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+        >
+          <motion.div 
+            className="absolute inset-0 bg-gallery-50 bg-opacity-85 backdrop-blur-sm will-change-opacity"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            onClick={handleClose}
+          />
+          
+          <motion.div 
+            className="relative w-[95vw] h-[95vh] pointer-events-none"
+            initial={{ scale: 0.95, opacity: 0 }}    // More subtle initial scale
+            animate={{ 
+              scale: 1, 
+              opacity: 1, 
+              transition: {
+                duration: 0.6,                        // More deliberate timing
+                ease: [0.25, 0.46, 0.45, 0.94]      // Custom cubic-bezier for elegance
+              }
+            }}
+            exit={{ 
+              scale: 0.98,                           // Subtle scale-down
+              opacity: 0, 
+              transition: {
+                duration: 0.4,
+                ease: "easeIn"
+              }
+            }}
+          >
+            <motion.div
+              initial={{ opacity: 0 }}              // Simplified image reveal
+              animate={{ 
+                opacity: showImage ? 1 : 0 
+              }}
+              transition={{ 
+                duration: 0.8,                       // Longer, more respectful fade-in
+                delay: 0.2,                          // Reduced delay for smoother flow
+                ease: "easeOut"
+              }}
+              className="w-full h-full"
+            >
+              <Image
+                src={painting.imageUrl}
+                alt={painting.altText}
+                fill
+                className="object-contain will-change-transform"
+                sizes="95vw"
+                priority
+              />
+            </motion.div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

@@ -125,14 +125,20 @@ export default function PaintingFrame({
           }
         }}
         whileHover={{ 
-          scale: 1.02,       // Further reduced for even subtler effect
+          scale: 1.015,      // Even more subtle for museum-appropriate feel
           rotate: 0,
           transition: { 
-            duration: 0.15,  // Even faster hover response
-            type: "spring",
-            damping: 25,
-            stiffness: 400,
-            restDelta: 0.001
+            duration: 0.4,   // Slower, more deliberate
+            ease: "easeOut"
+          }
+        }}
+        whileTap={{
+          scale: 0.99,           // More subtle feedback
+          rotate: 0,
+          transition: {
+            duration: 0.15,      // Slightly longer for more deliberate feel
+            type: "tween",       // Smoother than spring for memorial context
+            ease: "easeOut"      // Respectful deceleration
           }
         }}
         className="group cursor-pointer museum-frame transition-all duration-300 hover:shadow-painting"
