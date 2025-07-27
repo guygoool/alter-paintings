@@ -1,8 +1,9 @@
 'use client';
 
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Painting } from '@/types';
 import { usePaintingRotation } from '@/hooks/usePaintingRotation';
 import { ParallaxBackground, ParallaxDecorations } from './ParallaxBackground';
@@ -17,6 +18,7 @@ const baseDelay = 0.1;
 
 export default function HeroSection({ featuredPaintings, onScrollToGallery }: HeroSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end start']
@@ -64,9 +66,14 @@ export default function HeroSection({ featuredPaintings, onScrollToGallery }: He
                   className="gallery-title text-5xl md:text-6xl lg:text-7xl"
                 >
                   The Paintings of{' '}
-                  <span className="block text-artist-blue-green mt-2">
-                    Alter Metzger
-                  </span>
+                  <Link href="/about" className="relative inline-block mt-2">
+                    <motion.span 
+                      className="block text-artist-blue-green cursor-pointer transition-all duration-300 hover:text-museum-gold"
+                      whileHover={{ scale: 1.02 }}
+                    >
+                      Alter Metzger
+                    </motion.span>
+                  </Link>
                 </motion.h1>
 
               </div>

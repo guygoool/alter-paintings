@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useState } from 'react';
+import Link from 'next/link';
 
 export default function AboutLink() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -16,13 +17,14 @@ export default function AboutLink() {
       animate={{ scale: 1 }}
       transition={{ delay: 2, duration: 0.5 }}
     >
-      <motion.button
-        onHoverStart={() => setIsExpanded(true)}
-        onHoverEnd={() => setIsExpanded(false)}
-        className="group relative bg-artist-brown/90 backdrop-blur-sm text-gallery-50 rounded-full p-4 shadow-gallery hover:shadow-painting transition-all duration-300"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-      >
+      <Link href="/about">
+        <motion.button
+          onHoverStart={() => setIsExpanded(true)}
+          onHoverEnd={() => setIsExpanded(false)}
+          className="group relative bg-artist-brown/90 backdrop-blur-sm text-gallery-50 rounded-full p-4 shadow-gallery hover:shadow-painting transition-all duration-300"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+        >
         {/* Icon */}
         <div className="w-6 h-6 flex items-center justify-center">
           <svg 
@@ -60,12 +62,12 @@ export default function AboutLink() {
             
             <div className="space-y-3 text-gallery-100 text-sm leading-relaxed">
               <p>
-                <strong className="text-gallery-50">1912-1984</strong> • Polish-Israeli Artist
+                <strong className="text-gallery-50">1926-1989</strong> • Polish-Israeli Artist
               </p>
               
               <p>
                 Born in Poland, Alter Metzger survived the Holocaust and immigrated 
-                to Israel in 1949. He began painting in his late thirties as a way 
+                to Israel in 1948. He began painting in his late thirties as a way 
                 to process his experiences and preserve the memory of those who perished.
               </p>
               
@@ -93,7 +95,7 @@ export default function AboutLink() {
                 <div className="text-xs text-gallery-300">Years</div>
               </div>
               <div className="text-center">
-                <div className="text-lg font-crimson font-bold text-museum-gold">1949</div>
+                <div className="text-lg font-crimson font-bold text-museum-gold">1948</div>
                 <div className="text-xs text-gallery-300">Started</div>
               </div>
             </div>
@@ -107,7 +109,8 @@ export default function AboutLink() {
           transition={{ duration: 0.2 }}
           className="absolute right-full top-1/2 transform -translate-y-1/2 w-3 h-px bg-gallery-300 origin-right"
         />
-      </motion.button>
+        </motion.button>
+      </Link>
 
       {/* Pulsing indicator */}
       <motion.div

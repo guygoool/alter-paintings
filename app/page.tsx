@@ -5,7 +5,6 @@ import { alterMetzgerGallery, generateLoopedPaintings } from '@/utils/galleryDat
 import HeroSection from '@/components/HeroSection';
 import GallerySection from '@/components/GallerySection';
 import PaintingModal from '@/components/PaintingModal';
-import AboutLink from '@/components/AboutLink';
 import { Painting } from '@/types';
 
 const allPaintings = [
@@ -48,9 +47,6 @@ export default function Home() {
         />
       </div>
 
-      {/* Fixed Elements */}
-      <AboutLink />
-
       {/* Modal */}
       <PaintingModal
         painting={selectedPainting}
@@ -74,7 +70,7 @@ export default function Home() {
             </p>
             
             <div className="flex items-center justify-center space-x-8 text-sm text-gallery-200">
-              <span>1912 — 1984</span>
+              <span>1926 — 1989</span>
               <span className="w-1 h-1 bg-gallery-200 rounded-full" />
               <span>Polish-Israeli Artist</span>
               <span className="w-1 h-1 bg-gallery-200 rounded-full" />
