@@ -57,7 +57,7 @@ export default function AboutPage() {
                 </p>
                 
                 <p className="gallery-body text-lg leading-relaxed text-artist-warm-gray">
-                  Between 1939 and 1945, Metzger survived alone in the Łódź Ghetto labor camp. Near the war's end, he was transferred to Auschwitz. During transport, he jumped from the train with a friend. His friend was killed; Metzger was wounded but later found by American soldiers.
+                  Between 1939 and 1945, Metzger survived alone in the Łódź Ghetto labor camp. Near the war&apos;s end, he was transferred to Auschwitz. During transport, he jumped from the train with a friend. His friend was killed; Metzger was wounded but later found by American soldiers.
                 </p>
               </div>
 
@@ -81,7 +81,7 @@ export default function AboutPage() {
                 </p>
                 
                 <p className="gallery-body text-lg leading-relaxed text-artist-warm-gray">
-                  His works were exhibited at the White House, the President's Residence, and Yad Vashem. He married Yocheved Metzger during his service, and they settled in Holon where their children were born.
+                  His works were exhibited at the White House, the President&apos;s Residence, and Yad Vashem. He married Yocheved Metzger during his service, and they settled in Holon where their children were born.
                 </p>
                 
                 <p className="gallery-body text-lg leading-relaxed text-artist-warm-gray">

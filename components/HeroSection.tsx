@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Painting } from '@/types';
@@ -28,9 +28,6 @@ export default function HeroSection({ featuredPaintings, onScrollToGallery }: He
 
   const {
     currentPainting,
-    currentIndex,
-    nextPainting,
-    previousPainting,
     handleMouseEnter,
     handleMouseLeave,
     isPaused,
