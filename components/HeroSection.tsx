@@ -30,7 +30,6 @@ export default function HeroSection({ featuredPaintings, onScrollToGallery }: He
     currentPainting,
     handleMouseEnter,
     handleMouseLeave,
-    isPaused,
   } = usePaintingRotation({
     paintings: featuredPaintings,
     autoRotate: true,
@@ -137,16 +136,6 @@ export default function HeroSection({ featuredPaintings, onScrollToGallery }: He
                   </motion.div>
                 ))}
 
-                {/* Pause Indicator */}
-                {isPaused && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="absolute top-4 right-4 z-40 bg-black/50 text-white px-2 py-1 rounded text-xs"
-                  >
-                    Paused
-                  </motion.div>
-                )}
               </div>
             </motion.div>
           </div>
