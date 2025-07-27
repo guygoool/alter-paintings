@@ -20,7 +20,7 @@ export default function PaintingModal({ painting, isOpen, onClose }: PaintingMod
     setTimeout(() => {
       setIsClosing(false);
       onClose();
-    }, 300);
+    }, 200); // Reduced from 300ms for faster response
   };
 
   useEffect(() => {
@@ -34,10 +34,10 @@ export default function PaintingModal({ painting, isOpen, onClose }: PaintingMod
       document.addEventListener('keydown', handleEscape);
       document.body.style.overflow = 'hidden';
       
-      // Trigger fade-in after a short delay
+      // Trigger fade-in with shorter delay for faster response
       const timer = setTimeout(() => {
         setShowImage(true);
-      }, 100);
+      }, 50); // Reduced from 100ms
       
       return () => {
         clearTimeout(timer);
@@ -57,9 +57,9 @@ export default function PaintingModal({ painting, isOpen, onClose }: PaintingMod
   if ((!isOpen && !isClosing) || !painting) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center animate-in fade-in duration-300">
+    <div className="fixed inset-0 z-50 flex items-center justify-center animate-in fade-in duration-200">
       <div 
-        className="absolute inset-0 bg-gallery-50 bg-opacity-85 backdrop-blur-sm animate-in fade-in duration-300"
+        className="absolute inset-0 bg-gallery-50 bg-opacity-85 backdrop-blur-sm animate-in fade-in duration-200 will-change-opacity"
         onClick={handleClose}
       />
       
@@ -69,7 +69,7 @@ export default function PaintingModal({ painting, isOpen, onClose }: PaintingMod
           src={painting.imageUrl}
           alt={painting.altText}
           fill
-          className={`object-contain transition-opacity duration-300 ease-out ${
+          className={`object-contain transition-opacity duration-200 ease-out will-change-opacity ${
             showImage ? 'opacity-100' : 'opacity-0'
           }`}
           sizes="95vw"

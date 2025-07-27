@@ -11,15 +11,15 @@ interface GallerySectionProps {
   onSelectPainting: (painting: Painting) => void;
 }
 
-// Sophisticated animation variants for staggered entrances
+// Optimized animation variants for better performance
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.08,
-      delayChildren: 0.2,
-      duration: 0.6,
+      staggerChildren: 0.04, // Reduced from 0.08 for faster reveal
+      delayChildren: 0.1,    // Reduced from 0.2
+      duration: 0.4,         // Reduced from 0.6
     },
   },
 };
@@ -27,8 +27,8 @@ const containerVariants = {
 const itemVariants = {
   hidden: { 
     opacity: 0, 
-    y: 80,
-    scale: 0.95,
+    y: 40,              // Reduced from 80 for subtler movement
+    scale: 0.98,        // Reduced from 0.95 for subtler scaling
   },
   visible: { 
     opacity: 1, 
@@ -36,9 +36,10 @@ const itemVariants = {
     scale: 1,
     transition: {
       type: 'spring' as const,
-      damping: 25,
-      stiffness: 120,
-      duration: 0.8,
+      damping: 30,      // Increased for faster settling
+      stiffness: 100,   // Reduced for smoother motion
+      restDelta: 0.001, // Added for better performance
+      duration: 0.5,    // Reduced from 0.8
     },
   },
 };
@@ -114,34 +115,36 @@ export default function GallerySection({ paintings, onSelectPainting }: GalleryS
         
         <ParallaxDecorations />
         
-        {/* Additional floating elements */}
+        {/* Optimized floating elements with reduced animation frequency */}
         <motion.div
           animate={{ 
-            x: [0, 30, 0],
-            y: [0, -20, 0],
-            rotate: [0, 5, 0],
+            x: [0, 20, 0],     // Reduced movement range
+            y: [0, -10, 0],    // Reduced movement range
+            rotate: [0, 2, 0], // Reduced rotation
           }}
           transition={{ 
-            duration: 20,
+            duration: 30,      // Increased duration for slower, more subtle movement
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: "easeInOut",
+            restDelta: 0.01,   // Added for performance
           }}
-          className="absolute top-1/4 left-1/4 w-64 h-64 bg-museum-gold/5 rounded-full blur-3xl"
+          className="absolute top-1/4 left-1/4 w-64 h-64 bg-museum-gold/3 rounded-full blur-2xl will-change-transform"
         />
         
         <motion.div
           animate={{ 
-            x: [0, -40, 0],
-            y: [0, 30, 0],
-            rotate: [0, -3, 0],
+            x: [0, -25, 0],    // Reduced movement range
+            y: [0, 15, 0],     // Reduced movement range
+            rotate: [0, -1.5, 0], // Reduced rotation
           }}
           transition={{ 
-            duration: 25,
+            duration: 35,      // Increased duration
             repeat: Infinity,
             ease: "easeInOut",
-            delay: 5,
+            delay: 8,
+            restDelta: 0.01,   // Added for performance
           }}
-          className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-artist-sage/5 rounded-full blur-3xl"
+          className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-artist-sage/3 rounded-full blur-2xl will-change-transform"
         />
       </motion.div>
 

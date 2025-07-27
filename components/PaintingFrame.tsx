@@ -107,26 +107,33 @@ export default function PaintingFrame({
     <div className={`flex ${layoutClasses[layout]} w-full`}>
       <motion.div
         ref={elementRef}
-        initial={{ opacity: 0, y: 60, scale: 0.9 }}
+        initial={{ opacity: 0, y: 30, scale: 0.95 }}
         animate={isIntersecting ? { 
           opacity: 1, 
           y: 0, 
           scale: 1,
-          rotate: [0, 1, -1, 0]
+          rotate: [0, 0.5, -0.5, 0] // Reduced rotation range
         } : {}}
         transition={{ 
-          duration: 0.8, 
-          delay: index * 0.1,
+          duration: 0.5,     // Reduced from 0.8
+          delay: index * 0.05, // Reduced from 0.1
           rotate: {
-            duration: 8,
+            duration: 12,    // Increased for more subtle movement
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: "easeInOut",
+            restDelta: 0.01  // Added for performance
           }
         }}
         whileHover={{ 
-          scale: 1.05, 
+          scale: 1.03,       // Reduced from 1.05 for subtler effect
           rotate: 0,
-          transition: { duration: 0.3 }
+          transition: { 
+            duration: 0.2,   // Faster hover response
+            type: "spring",
+            damping: 20,
+            stiffness: 300,
+            restDelta: 0.001
+          }
         }}
         className="group cursor-pointer museum-frame transition-all duration-300 hover:shadow-painting"
         style={{
@@ -143,7 +150,7 @@ export default function PaintingFrame({
                 src={painting.imageUrl}
                 alt={painting.altText}
                 fill
-                className={`object-cover transition-all duration-500 group-hover:scale-110 ${
+                className={`object-cover transition-all duration-300 group-hover:scale-105 will-change-transform ${
                   imageLoaded ? 'opacity-100' : 'opacity-0'
                 }`}
                 onLoad={handleImageLoad}
