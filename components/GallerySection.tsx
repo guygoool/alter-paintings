@@ -156,7 +156,7 @@ export default function GallerySection({ paintings, onSelectPainting }: GalleryS
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '0px', amount: 0.1 }}
+            viewport={{ once: true, margin: '-200px' }}
             className="space-y-24 md:space-y-32 lg:space-y-40 mt-[200px]"
             >
             {paintings.map((painting, index) => {
