@@ -21,7 +21,7 @@ export default function AboutLink() {
         <motion.button
           onHoverStart={() => setIsExpanded(true)}
           onHoverEnd={() => setIsExpanded(false)}
-          className="group relative bg-artist-brown/90 backdrop-blur-sm text-gallery-50 rounded-full p-4 shadow-gallery hover:shadow-painting transition-all duration-300"
+          className="group relative bg-artist-brown/90 backdrop-blur-sm text-gallery-50 rounded-full p-4 shadow-gallery hover:shadow-painting transition-all duration-300 hover:bg-artist-sage/90"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
         >
