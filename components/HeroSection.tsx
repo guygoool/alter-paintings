@@ -59,7 +59,7 @@ export default function HeroSection({ featuredPaintings, onScrollToGallery }: He
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: baseDelay }}
-                  className="gallery-title text-5xl md:text-6xl lg:text-7xl"
+                  className="gallery-title text-5xl md:text-6xl lg:text-7xl text-center lg:text-left"
                 >
                   The Paintings of{' '}
                   <Link href="/about" className="relative inline-block mt-2">
@@ -148,7 +148,7 @@ export default function HeroSection({ featuredPaintings, onScrollToGallery }: He
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
         style={{ opacity }}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20"
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 hidden lg:block"
       >
         <button
           onClick={onScrollToGallery}
