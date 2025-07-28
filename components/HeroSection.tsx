@@ -59,15 +59,20 @@ export default function HeroSection({ featuredPaintings, onScrollToGallery }: He
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: baseDelay }}
-                  className="gallery-title text-5xl md:text-6xl lg:text-7xl"
+                  className="gallery-title text-5xl md:text-6xl lg:text-7xl text-center lg:text-left"
                 >
                   The Paintings of{' '}
-                  <Link href="/about" className="relative inline-block mt-2">
+                  <Link href="/about" className="relative inline-block mt-2 group">
                     <motion.span 
-                      className="block text-artist-blue-green cursor-pointer transition-all duration-300 hover:text-museum-gold"
+                      className="block text-museum-gold cursor-pointer transition-all duration-300 hover:text-museum-gold-light relative"
                       whileHover={{ scale: 1.02 }}
                     >
                       Alter Metzger
+                      {/* Subtle underline that becomes more prominent on hover */}
+                      <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-museum-gold-muted opacity-40 transition-all duration-300 group-hover:opacity-80 group-hover:h-1" />
+                      
+                      {/* Mobile-friendly tap indicator */}
+                      <span className="absolute -inset-2 rounded-lg bg-museum-gold/5 opacity-0 transition-opacity duration-200 group-hover:opacity-100 md:hidden" />
                     </motion.span>
                   </Link>
                 </motion.h1>
@@ -148,7 +153,7 @@ export default function HeroSection({ featuredPaintings, onScrollToGallery }: He
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
         style={{ opacity }}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20"
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 hidden lg:block"
       >
         <button
           onClick={onScrollToGallery}
