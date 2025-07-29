@@ -65,7 +65,7 @@ const statisticVariants = {
 
 export default function GallerySection({ paintings, onSelectPainting }: GallerySectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [viewportConfig, setViewportConfig] = useState({ once: true, margin: '-200px' });
+  const [viewportConfig, setViewportConfig] = useState<{ once: boolean; margin?: string; amount?: number }>({ once: true, margin: '-200px' });
   const [debugInfo, setDebugInfo] = useState('');
 
   // Detect iOS and configure viewport settings
@@ -83,7 +83,7 @@ export default function GallerySection({ paintings, onSelectPainting }: GalleryS
         once: true, 
         margin: '0px',
         amount: 0.05
-      } as any);
+      });
     } else {
       // Keep original settings for desktop
       setViewportConfig({ once: true, margin: '-200px' });
