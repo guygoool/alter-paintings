@@ -66,19 +66,14 @@ const statisticVariants = {
 export default function GallerySection({ paintings, onSelectPainting }: GallerySectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [viewportConfig, setViewportConfig] = useState<{ once: boolean; margin?: string; amount?: number }>({ once: true, margin: '-200px' });
-  const [debugInfo, setDebugInfo] = useState('');
 
   // Detect iOS and configure viewport settings
   useEffect(() => {
     const userAgent = navigator.userAgent;
     const isIOS = /iPad|iPhone|iPod/.test(userAgent);
-    const isSafari = /Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS/.test(userAgent);
-    
-    // Set debug info for testing
-    setDebugInfo(`UA: ${userAgent.substring(0, 50)}... iOS: ${isIOS}, Safari: ${isSafari}`);
     
     if (isIOS) {
-      // Try more aggressive settings for iOS
+      // Use aggressive settings for iOS Safari
       setViewportConfig({ 
         once: true, 
         margin: '200px',
@@ -125,13 +120,6 @@ export default function GallerySection({ paintings, onSelectPainting }: GalleryS
 
   return (
     <div ref={containerRef} className="relative min-h-screen bg-gallery-50 paper-bg overflow-hidden mt-[140px]">
-      
-      {/* Debug info for iOS testing - remove after fixing */}
-      <div className="fixed top-4 left-4 z-50 bg-black/80 text-white p-2 text-xs rounded max-w-xs">
-        <div>Debug Info:</div>
-        <div>{debugInfo}</div>
-        <div>Config: {JSON.stringify(viewportConfig)}</div>
-      </div>
       {/* Advanced Parallax Background */}
       <motion.div
         style={{ 
