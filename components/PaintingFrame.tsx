@@ -197,17 +197,6 @@ export default function PaintingFrame({
 
         </div>
 
-        {/* Museum Label */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={isIntersecting ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: index * 0.1 + 0.3 }}
-          className="absolute -bottom-12 left-4 right-4 bg-gallery-50 border border-gallery-200 p-3 rounded-sm shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        >
-          <div className="text-center text-artist-brown text-sm font-medium">
-            {painting.year || 'Date unknown'}
-          </div>
-        </motion.div>
       </motion.div>
     </div>
   );
