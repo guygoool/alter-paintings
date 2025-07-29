@@ -46,7 +46,7 @@ export default function HeroSection({ featuredPaintings, onScrollToGallery }: He
       </ParallaxBackground>
 
       <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="min-h-screen flex items-center">
+        <div className="min-h-screen flex items-center pt-safe-top">
           <div className="grid lg:grid-cols-12 gap-12 items-center w-full">
             
             {/* Left Column - Text Content */}
@@ -59,7 +59,7 @@ export default function HeroSection({ featuredPaintings, onScrollToGallery }: He
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: baseDelay }}
-                  className="gallery-title text-5xl md:text-6xl lg:text-7xl text-center lg:text-left"
+                  className="gallery-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-center lg:text-left leading-tight pt-4 pb-2"
                 >
                   The Paintings of{' '}
                   <Link href="/about" className="relative inline-block mt-2 group">

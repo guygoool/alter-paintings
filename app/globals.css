@@ -20,15 +20,28 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+  /* Prevent viewport jumping on Android */
+  height: 100%;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
 body {
   font-family: var(--font-inter);
   background: #faf8f5;
   color: #5d4e37;
   overflow-x: hidden;
-}
-
-html {
-  scroll-behavior: smooth;
+  /* Android-specific fixes */
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  position: relative;
+  /* Prevent text size adjustment on orientation change */
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  /* Fix Android Chrome address bar issues */
+  padding-top: env(safe-area-inset-top);
 }
 
 /* Performance optimization classes */
@@ -341,6 +354,23 @@ html {
   background: linear-gradient(180deg, var(--frame-gold-light) 0%, var(--frame-bronze) 100%);
 }
 
+/* Safe area utilities for mobile devices */
+.pt-safe-top {
+  padding-top: max(1rem, env(safe-area-inset-top));
+}
+
+.pb-safe-bottom {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+/* Android-specific viewport fixes */
+@supports (-webkit-appearance: none) {
+  body {
+    /* Additional Android Chrome fixes */
+    min-height: 100dvh;
+  }
+}
+
 /* Responsive design helpers */
 @media (max-width: 768px) {
   .museum-frame {
@@ -355,12 +385,20 @@ html {
   .paper-bg {
     background-size: 16px 16px, 32px 32px, 32px 32px;
   }
+  
+  /* Ensure title is fully visible on mobile */
+  .gallery-title {
+    padding-top: max(2rem, env(safe-area-inset-top, 2rem));
+    margin-top: 0;
+  }
 }
 
 @media (max-width: 640px) {
   .gallery-title {
     line-height: 1.2;
     letter-spacing: -0.01em;
+    padding-top: max(3rem, env(safe-area-inset-top, 3rem));
+    margin-top: 0;
   }
   
   .museum-frame {
