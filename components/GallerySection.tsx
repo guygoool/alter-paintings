@@ -78,11 +78,11 @@ export default function GallerySection({ paintings, onSelectPainting }: GalleryS
     setDebugInfo(`UA: ${userAgent.substring(0, 50)}... iOS: ${isIOS}, Safari: ${isSafari}`);
     
     if (isIOS) {
-      // Try different settings for iOS
+      // Try more aggressive settings for iOS
       setViewportConfig({ 
         once: true, 
-        margin: '0px',
-        amount: 0.05
+        margin: '200px',
+        amount: 0.01
       });
     } else {
       // Keep original settings for desktop
