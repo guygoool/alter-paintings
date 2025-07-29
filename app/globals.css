@@ -387,6 +387,27 @@ body {
   }
 }
 
+/* Gallery performance optimizations */
+.museum-frame {
+  /* Prevent flickering during animations */
+  contain: layout style paint;
+  transform: translateZ(0);
+}
+
+.museum-frame img {
+  /* Optimize image rendering */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: optimize-contrast;
+  backface-visibility: hidden;
+}
+
+/* Reduce repaints for frame transitions */
+.painting-content {
+  /* Isolate painting content to its own layer */
+  will-change: transform;
+  transform: translateZ(0);
+}
+
 /* Responsive design helpers */
 @media (max-width: 768px) {
   .museum-frame {
