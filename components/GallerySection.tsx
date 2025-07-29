@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useEffect, useState } from 'react';
 import { Painting } from '@/types';
 import PaintingFrame from './PaintingFrame';
 import { ParallaxBackground, ParallaxDecorations } from './ParallaxBackground';
@@ -65,6 +65,31 @@ const statisticVariants = {
 
 export default function GallerySection({ paintings, onSelectPainting }: GallerySectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [viewportConfig, setViewportConfig] = useState<{ once: boolean; margin?: string; amount?: number }>({ once: true, margin: '-200px' });
+  const [debugInfo, setDebugInfo] = useState('');
+
+  // Detect iOS and configure viewport settings
+  useEffect(() => {
+    const userAgent = navigator.userAgent;
+    const isIOS = /iPad|iPhone|iPod/.test(userAgent);
+    const isSafari = /Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS/.test(userAgent);
+    
+    // Set debug info for testing
+    setDebugInfo(`UA: ${userAgent.substring(0, 50)}... iOS: ${isIOS}, Safari: ${isSafari}`);
+    
+    if (isIOS) {
+      // Try different settings for iOS
+      setViewportConfig({ 
+        once: true, 
+        margin: '0px',
+        amount: 0.05
+      });
+    } else {
+      // Keep original settings for desktop
+      setViewportConfig({ once: true, margin: '-200px' });
+    }
+  }, []);
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start end', 'end start']
@@ -100,6 +125,13 @@ export default function GallerySection({ paintings, onSelectPainting }: GalleryS
 
   return (
     <div ref={containerRef} className="relative min-h-screen bg-gallery-50 paper-bg overflow-hidden mt-[140px]">
+      
+      {/* Debug info for iOS testing - remove after fixing */}
+      <div className="fixed top-4 left-4 z-50 bg-black/80 text-white p-2 text-xs rounded max-w-xs">
+        <div>Debug Info:</div>
+        <div>{debugInfo}</div>
+        <div>Config: {JSON.stringify(viewportConfig)}</div>
+      </div>
       {/* Advanced Parallax Background */}
       <motion.div
         style={{ 
@@ -156,7 +188,7 @@ export default function GallerySection({ paintings, onSelectPainting }: GalleryS
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-200px' }}
+            viewport={viewportConfig}
             className="space-y-24 md:space-y-32 lg:space-y-40 mt-[200px]"
             >
             {paintings.map((painting, index) => {
