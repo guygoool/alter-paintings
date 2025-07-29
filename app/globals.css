@@ -371,6 +371,22 @@ body {
   }
 }
 
+/* Android-specific animation reductions */
+@media screen and (max-width: 767px) {
+  /* Reduce motion on small screens (likely mobile) */
+  .gallery-title {
+    /* Ensure stable positioning during animations */
+    transform: translateZ(0);
+    will-change: auto;
+    backface-visibility: hidden;
+  }
+  
+  /* Prevent layout shifts during animations */
+  [data-framer-name] {
+    transform: translateZ(0);
+  }
+}
+
 /* Responsive design helpers */
 @media (max-width: 768px) {
   .museum-frame {
