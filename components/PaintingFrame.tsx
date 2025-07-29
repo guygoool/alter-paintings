@@ -28,6 +28,7 @@ export default function PaintingFrame({
   const { elementRef, isIntersecting } = useIntersectionObserver({
     threshold: 0.3,
     rootMargin: '-50px',
+    triggerOnce: true, // Ensure animations only happen once
   });
 
   useEffect(() => {
@@ -111,18 +112,12 @@ export default function PaintingFrame({
         animate={isIntersecting ? { 
           opacity: 1, 
           y: 0, 
-          scale: 1,
-          rotate: [0, 0.5, -0.5, 0] // Reduced rotation range
+          scale: 1
         } : {}}
         transition={{ 
-          duration: 0.5,     // Reduced from 0.8
-          delay: index * 0.05, // Reduced from 0.1
-          rotate: {
-            duration: 12,    // Increased for more subtle movement
-            repeat: Infinity,
-            ease: "easeInOut",
-            restDelta: 0.01  // Added for performance
-          }
+          duration: 0.5,     
+          delay: index * 0.05,
+          ease: "easeOut"
         }}
         whileHover={{ 
           scale: 1.015,      // Even more subtle for museum-appropriate feel
@@ -156,7 +151,7 @@ export default function PaintingFrame({
                 src={painting.imageUrl}
                 alt={painting.altText}
                 fill
-                className={`object-cover transition-all duration-200 group-hover:scale-103 will-change-transform ${
+                className={`object-cover transition-opacity duration-300 group-hover:scale-103 ${
                   imageLoaded ? 'opacity-100' : 'opacity-0'
                 }`}
                 onLoad={handleImageLoad}
@@ -165,7 +160,7 @@ export default function PaintingFrame({
               />
               
               {!imageLoaded && (
-                <div className="absolute inset-0 bg-gallery-100 animate-pulse" />
+                <div className="absolute inset-0 bg-gallery-100" />
               )}
             </>
           ) : (
@@ -183,16 +178,11 @@ export default function PaintingFrame({
 
           {/* Painting Info Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
-            <motion.div
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.1 }}
-              className="text-white"
-            >
+            <div className="text-white">
               {painting.year && (
                 <span className="text-gallery-200 text-xl font-medium">{painting.year}</span>
               )}
-            </motion.div>
+            </div>
           </div>
 
         </div>
