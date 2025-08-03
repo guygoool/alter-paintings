@@ -222,7 +222,7 @@ body {
   }
 }
 
-/* Shimmer effect for loading states */
+/* Enhanced shimmer effect for smooth loading states */
 .shimmer {
   position: relative;
   overflow: hidden;
@@ -248,6 +248,56 @@ body {
 @keyframes shimmer {
   100% {
     transform: translateX(100%);
+  }
+}
+
+/* Smooth gradient shimmer for image loading */
+.animate-shimmer {
+  background: linear-gradient(
+    110deg,
+    transparent 0%,
+    transparent 40%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0.8) 55%,
+    rgba(255, 255, 255, 0.5) 60%,
+    transparent 70%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: smooth-shimmer 3s ease-in-out infinite;
+}
+
+@keyframes smooth-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Image loading skeleton with pulse */
+.image-skeleton {
+  background: linear-gradient(
+    135deg,
+    #f8f6f0 0%,
+    #f2ede3 25%,
+    #ebe5d8 50%,
+    #f2ede3 75%,
+    #f8f6f0 100%
+  );
+  background-size: 400% 400%;
+  animation: skeleton-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% {
+    background-position: 0% 0%;
+    opacity: 0.8;
+  }
+  50% {
+    background-position: 100% 100%;
+    opacity: 1;
   }
 }
 

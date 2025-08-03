@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useRef } from 'react';
 import { Painting } from '@/types';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
@@ -23,10 +23,12 @@ export default function PaintingFrame({
 }: PaintingFrameProps) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [imageStartedLoading, setImageStartedLoading] = useState(false);
   const [naturalDimensions, setNaturalDimensions] = useState<{width: number, height: number} | null>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
   const { elementRef, isIntersecting } = useIntersectionObserver({
-    threshold: 0.3,
-    rootMargin: '-50px',
+    threshold: 0.1,
+    rootMargin: '100px',
     triggerOnce: true,
   });
 
@@ -74,19 +76,26 @@ export default function PaintingFrame({
     center: 'justify-center'
   };
 
-  const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>) => {
+  const handleImageLoad = useCallback((event: React.SyntheticEvent<HTMLImageElement>) => {
     const img = event.currentTarget;
     setNaturalDimensions({
       width: img.naturalWidth,
       height: img.naturalHeight
     });
-    setImageLoaded(true);
-  };
+    // Small delay to ensure smooth transition
+    setTimeout(() => {
+      setImageLoaded(true);
+    }, 50);
+  }, []);
   
-  const handleImageError = () => {
+  const handleImageError = useCallback(() => {
     setImageError(true);
     setImageLoaded(true);
-  };
+  }, []);
+
+  const handleImageLoadStart = useCallback(() => {
+    setImageStartedLoading(true);
+  }, []);
 
   return (
     <div className={`flex ${layoutClasses[layout]} w-full`}>
@@ -108,18 +117,16 @@ export default function PaintingFrame({
           ease: "easeOut"
         }}
         whileHover={{ 
-          scale: 1.015,      // Even more subtle for museum-appropriate feel
-          rotate: 0,
+          scale: 1.008,      // Much more subtle to prevent jumpiness
           transition: { 
-            duration: 0.4,   // Slower, more deliberate
+            duration: 0.6,   // Slower, more elegant
             ease: "easeOut"
           }
         }}
         whileTap={{
-          scale: 0.97,
-          rotate: 0,
+          scale: 0.995,
           transition: {
-            duration: 0.15,
+            duration: 0.1,
             type: "tween",
             ease: "easeOut"
           }
@@ -134,21 +141,48 @@ export default function PaintingFrame({
         <div className="painting-content h-full relative overflow-hidden">
           {!imageError ? (
             <>
-              <Image
-                src={painting.imageUrl}
-                alt={painting.altText}
-                fill
-                className={`object-cover transition-opacity duration-300 group-hover:scale-103 ${
-                  imageLoaded ? 'opacity-100' : 'opacity-0'
-                }`}
-                onLoad={handleImageLoad}
-                onError={handleImageError}
-                sizes="(max-width: 768px) 256px, (max-width: 1200px) 320px, 384px"
-              />
-              
+              {/* Elegant skeleton loader with subtle animation */}
               {!imageLoaded && (
-                <div className="absolute inset-0 bg-gallery-100" />
+                <motion.div 
+                  className="absolute inset-0 bg-gradient-to-br from-gallery-50 via-gallery-100 to-gallery-150"
+                  initial={{ opacity: 1 }}
+                  animate={{ 
+                    opacity: imageStartedLoading ? [1, 0.7, 1] : 1
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: imageStartedLoading ? Infinity : 0,
+                    ease: "easeInOut"
+                  }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" />
+                </motion.div>
               )}
+              
+              {/* Image with smooth fade-in */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: imageLoaded ? 1 : 0 }}
+                transition={{ 
+                  duration: 0.8, 
+                  ease: "easeOut",
+                  delay: 0.1
+                }}
+                className="absolute inset-0"
+              >
+                <Image
+                  ref={imageRef}
+                  src={painting.imageUrl}
+                  alt={painting.altText}
+                  fill
+                  className="object-cover group-hover:scale-[1.02] transition-transform duration-500 ease-out"
+                  onLoad={handleImageLoad}
+                  onError={handleImageError}
+                  onLoadStart={handleImageLoadStart}
+                  sizes="(max-width: 768px) 256px, (max-width: 1200px) 320px, 384px"
+                  priority={index < 6}
+                />
+              </motion.div>
             </>
           ) : (
             <div className="flex items-center justify-center h-full bg-gallery-100">

@@ -12,16 +12,16 @@ interface PaintingModalProps {
 }
 
 export default function PaintingModal({ painting, isOpen, onClose }: PaintingModalProps) {
-  const [showImage, setShowImage] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
 
   const handleClose = useCallback(() => {
     setIsClosing(true);
-    setShowImage(false);
+    setImageLoaded(false);
     setTimeout(() => {
       setIsClosing(false);
       onClose();
-    }, 300); // Increased to match animation duration
+    }, 300);
   }, [onClose]);
 
   useEffect(() => {
@@ -35,18 +35,12 @@ export default function PaintingModal({ painting, isOpen, onClose }: PaintingMod
       document.addEventListener('keydown', handleEscape);
       document.body.style.overflow = 'hidden';
       
-      // Trigger fade-in with shorter delay for faster response
-      const timer = setTimeout(() => {
-        setShowImage(true);
-      }, 100); // Slightly increased for smoother transition
-      
       return () => {
-        clearTimeout(timer);
         document.removeEventListener('keydown', handleEscape);
         document.body.style.overflow = 'unset';
       };
     } else {
-      setShowImage(false);
+      setImageLoaded(false);
     }
 
     return () => {
@@ -99,14 +93,36 @@ export default function PaintingModal({ painting, isOpen, onClose }: PaintingMod
             drag={false}
             whileTap={{ scale: 0.99 }}               // Subtle feedback on tap
           >
+            {/* Elegant loading state */}
+            {!imageLoaded && (
+              <motion.div 
+                className="absolute inset-0 flex items-center justify-center bg-gallery-50/90 backdrop-blur-sm"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <motion.div
+                  className="w-16 h-16 border-4 border-museum-gold/30 border-t-museum-gold rounded-full"
+                  animate={{ rotate: 360 }}
+                  transition={{
+                    duration: 1.5,
+                    repeat: Infinity,
+                    ease: "linear"
+                  }}
+                />
+              </motion.div>
+            )}
+            
+            {/* Image with smooth reveal */}
             <motion.div
-              initial={{ opacity: 0 }}              // Simplified image reveal
+              initial={{ opacity: 0, scale: 1.02 }}
               animate={{ 
-                opacity: showImage ? 1 : 0 
+                opacity: imageLoaded ? 1 : 0,
+                scale: imageLoaded ? 1 : 1.02
               }}
               transition={{ 
-                duration: 0.8,                       // Longer, more respectful fade-in
-                delay: 0.2,                          // Reduced delay for smoother flow
+                duration: 0.6,
                 ease: "easeOut"
               }}
               className="w-full h-full"
@@ -115,7 +131,10 @@ export default function PaintingModal({ painting, isOpen, onClose }: PaintingMod
                 src={painting.imageUrl}
                 alt={painting.altText}
                 fill
-                className="object-contain will-change-transform"
+                className="object-contain"
+                onLoad={() => {
+                  setTimeout(() => setImageLoaded(true), 100);
+                }}
                 sizes="95vw"
                 priority
               />
