@@ -73,14 +73,14 @@ export default function HeroSection({ featuredPaintings, onScrollToGallery }: He
               <div className="space-y-6">
                 <motion.h1 
                   initial={{ 
-                    opacity: isMobile ? 0.3 : 0,  // Start more visible on mobile
-                    y: isMobile ? 2 : 30  // Almost no movement on mobile
+                    opacity: isMobile ? 0 : 0,  // Same as desktop
+                    y: isMobile ? 20 : 30  // Reduced but still visible movement on mobile
                   }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ 
-                    duration: isMobile ? 0.2 : 0.8,  // Much faster on mobile
-                    delay: isMobile ? 0 : baseDelay,  // No delay on mobile
-                    ease: isMobile ? "easeOut" : "easeInOut"  // Smoother easing on mobile
+                    duration: isMobile ? 0.6 : 0.8,  // Closer to desktop timing
+                    delay: isMobile ? baseDelay * 0.5 : baseDelay,  // Shorter but still present delay
+                    ease: "easeInOut"  // Same easing for consistency
                   }}
                   className="gallery-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-center lg:text-left leading-tight pt-4 pb-2"
                 >
@@ -88,7 +88,8 @@ export default function HeroSection({ featuredPaintings, onScrollToGallery }: He
                   <Link href="/about" className="relative inline-block mt-2 group">
                     <motion.span 
                       className="block text-museum-gold cursor-pointer transition-all duration-300 hover:text-museum-gold-light relative"
-                      whileHover={{ scale: isMobile ? 1.01 : 1.02 }}  // Less scaling on mobile
+                      whileHover={{ scale: 1.02 }}  // Same scaling for consistency
+                      whileTap={{ scale: 0.98 }}  // Add tap feedback for mobile
                     >
                       Alter Metzger
                       {/* Subtle underline that becomes more prominent on hover */}

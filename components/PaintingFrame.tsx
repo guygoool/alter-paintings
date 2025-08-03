@@ -2,9 +2,10 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { Painting } from '@/types';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+// import { useMobileAnimations } from '@/hooks/useMobileAnimations';
 
 interface PaintingFrameProps {
   painting: Painting;
@@ -24,25 +25,13 @@ export default function PaintingFrame({
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [naturalDimensions, setNaturalDimensions] = useState<{width: number, height: number} | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
   const { elementRef, isIntersecting } = useIntersectionObserver({
     threshold: 0.3,
     rootMargin: '-50px',
-    triggerOnce: true, // Ensure animations only happen once
+    triggerOnce: true,
   });
 
-  useEffect(() => {
-    const checkIsMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    checkIsMobile();
-    window.addEventListener('resize', checkIsMobile);
-    
-    return () => window.removeEventListener('resize', checkIsMobile);
-  }, []);
-
-  const calculateDimensions = (size: 'small' | 'medium' | 'large') => {
+  const calculateDimensions = useCallback((size: 'small' | 'medium' | 'large') => {
     // Use natural image dimensions if available, otherwise fall back to metadata
     const dimensions = naturalDimensions || painting.dimensions;
     
@@ -56,12 +45,8 @@ export default function PaintingFrame({
 
     const aspectRatio = dimensions.width / dimensions.height;
     
-    // Responsive base sizes - smaller on mobile
-    const baseSizes = isMobile ? {
-      small: 200,
-      medium: 260,
-      large: 320
-    } : {
+    // Base sizes
+    const baseSizes = {
       small: 280,
       medium: 350,
       large: 420
@@ -80,9 +65,9 @@ export default function PaintingFrame({
         height: baseSize
       };
     }
-  };
+  }, [naturalDimensions, painting.dimensions]);
 
-  const frameDimensions = useMemo(() => calculateDimensions(size), [size, naturalDimensions, isMobile, painting.dimensions]);
+  const frameDimensions = useMemo(() => calculateDimensions(size), [calculateDimensions, size]);
 
   const layoutClasses = {
     left: 'justify-start',
@@ -108,7 +93,11 @@ export default function PaintingFrame({
     <div className={`flex ${layoutClasses[layout]} w-full`}>
       <motion.div
         ref={elementRef}
-        initial={{ opacity: 0, y: 30, scale: 0.95 }}
+        initial={{ 
+          opacity: 0, 
+          y: 30, 
+          scale: 0.95 
+        }}
         animate={isIntersecting ? { 
           opacity: 1, 
           y: 0, 
@@ -128,19 +117,18 @@ export default function PaintingFrame({
           }
         }}
         whileTap={{
-          scale: 0.99,           // More subtle feedback
+          scale: 0.97,
           rotate: 0,
           transition: {
-            duration: 0.15,      // Slightly longer for more deliberate feel
-            type: "tween",       // Smoother than spring for memorial context
-            ease: "easeOut"      // Respectful deceleration
+            duration: 0.15,
+            type: "tween",
+            ease: "easeOut"
           }
         }}
         className="group cursor-pointer museum-frame transition-all duration-300 hover:shadow-painting"
         style={{
           width: `${frameDimensions.width}px`,
           height: `${frameDimensions.height}px`,
-          transform: `rotate(${layout === 'left' ? '2deg' : layout === 'right' ? '-2deg' : '0deg'})`,
         }}
         onClick={() => onSelect(painting)}
       >
@@ -176,8 +164,8 @@ export default function PaintingFrame({
             </div>
           )}
 
-          {/* Painting Info Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+          {/* Painting Info Overlay - Enhanced for mobile */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
             <div className="text-white">
               {painting.year && (
                 <span className="text-gallery-200 text-xl font-medium">{painting.year}</span>

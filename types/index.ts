@@ -1,7 +1,7 @@
 export interface Painting {
   id: number;
   title: string;
-  year: number;
+  year?: number;
   imageUrl: string;
   altText: string;
   description?: string;
