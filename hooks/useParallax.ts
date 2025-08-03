@@ -1,6 +1,6 @@
 'use client';
 
-import { useTransform, useScroll, MotionValue } from 'framer-motion';
+import { useTransform, useScroll } from 'framer-motion';
 import { useRef } from 'react';
 import { ParallaxOptions } from '@/types';
 
@@ -30,12 +30,5 @@ export function useParallax({
   };
 }
 
-export function useParallaxTransform(
-  scrollYProgress: MotionValue<number>,
-  inputRange: number[] = [0, 1],
-  outputRange: string[] = ['0%', '50%']
-) {
-  return useTransform(scrollYProgress, inputRange, outputRange);
-}
 
 export default useParallax;

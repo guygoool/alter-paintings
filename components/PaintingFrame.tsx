@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { useState, useMemo, useCallback } from 'react';
 import { Painting } from '@/types';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
-// import { useMobileAnimations } from '@/hooks/useMobileAnimations';
 
 interface PaintingFrameProps {
   painting: Painting;

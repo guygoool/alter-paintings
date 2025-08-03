@@ -133,7 +133,7 @@ export default function HeroSection({ featuredPaintings, onScrollToGallery }: He
                       sizes="320px"
                       priority
                     />
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-4">
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-4 opacity-0 hover:opacity-100 transition-opacity duration-300">
                       <p className="text-white text-lg font-medium">{currentPainting?.year}</p>
                     </div>
                   </div>
