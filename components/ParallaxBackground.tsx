@@ -33,30 +33,6 @@ export function ParallaxBackground({
   );
 }
 
-interface ParallaxElementProps extends ParallaxOptions {
-  children: ReactNode;
-  className?: string;
-}
-
-export function ParallaxElement({
-  children,
-  className = '',
-  speed = 0.3,
-  direction = 'up',
-  disabled = false,
-}: ParallaxElementProps) {
-  const { ref, y } = useParallax({ speed, direction, disabled });
-
-  return (
-    <motion.div
-      ref={ref}
-      style={{ y }}
-      className={`parallax-element will-change-transform ${className}`}
-    >
-      {children}
-    </motion.div>
-  );
-}
 
 interface ParallaxLayerProps {
   speed: number;

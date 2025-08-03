@@ -14,19 +14,6 @@ export interface Painting {
   tags?: string[];
 }
 
-export interface PaintingFrameProps {
-  painting: Painting;
-  index: number;
-  layout?: 'left' | 'right' | 'center';
-  size?: 'small' | 'medium' | 'large';
-  onSelect: (painting: Painting) => void;
-}
-
-export interface ScrollTriggerOptions {
-  threshold?: number | number[];
-  rootMargin?: string;
-  triggerOnce?: boolean;
-}
 
 export interface ParallaxOptions {
   speed?: number;
