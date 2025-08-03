@@ -4,7 +4,6 @@ export const realPaintings: Painting[] = [
   {
     id: 1,
     title: 'The Alley',
-    year: 1965,
     imageUrl: '/images/alley.jpeg',
     altText: '1965',
     dimensions: { width: 45, height: 35, unit: 'cm' },
