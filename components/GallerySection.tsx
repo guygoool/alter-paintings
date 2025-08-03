@@ -67,17 +67,19 @@ export default function GallerySection({ paintings, onSelectPainting }: GalleryS
   const containerRef = useRef<HTMLDivElement>(null);
   const [viewportConfig, setViewportConfig] = useState<{ once: boolean; margin?: string; amount?: number }>({ once: true, margin: '-200px' });
 
-  // Detect iOS and configure viewport settings
+  // Detect mobile and configure viewport settings
   useEffect(() => {
     const userAgent = navigator.userAgent;
     const isIOS = /iPad|iPhone|iPod/.test(userAgent);
+    const isAndroid = /Android/i.test(userAgent);
+    const isMobile = window.innerWidth < 768;
     
-    if (isIOS) {
-      // Use aggressive settings for iOS Safari
+    if (isIOS || isAndroid || isMobile) {
+      // Use optimized settings for mobile devices
       setViewportConfig({ 
         once: true, 
-        margin: '200px',
-        amount: 0.01
+        margin: '100px',  // Less aggressive than before
+        amount: 0.1       // Higher threshold for better user experience
       });
     } else {
       // Keep original settings for desktop
