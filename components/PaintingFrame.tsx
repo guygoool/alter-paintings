@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import { Painting } from '@/types';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
-// import { useMobileAnimations } from '@/hooks/useMobileAnimations';
+import { useMobileAnimations } from '@/hooks/useMobileAnimations';
 
 interface PaintingFrameProps {
   painting: Painting;
@@ -26,14 +26,10 @@ export default function PaintingFrame({
   const [imageError, setImageError] = useState(false);
   const [naturalDimensions, setNaturalDimensions] = useState<{width: number, height: number} | null>(null);
   const [isMobile, setIsMobile] = useState(false);
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
-  
-  useEffect(() => {
-    setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
-  }, []);
+  const mobileConfig = useMobileAnimations();
   const { elementRef, isIntersecting } = useIntersectionObserver({
-    threshold: isMobile ? 0.2 : 0.3,
-    rootMargin: isMobile ? '0px' : '-50px',
+    threshold: mobileConfig.isMobile ? 0.2 : 0.3,
+    rootMargin: mobileConfig.isMobile ? '0px' : '-50px',
     triggerOnce: true, // Ensure animations only happen once
   });
 
@@ -116,8 +112,8 @@ export default function PaintingFrame({
         ref={elementRef}
         initial={{ 
           opacity: 0, 
-          y: isMobile ? 20 : 30, 
-          scale: isMobile ? 0.98 : 0.95 
+          y: mobileConfig.isMobile ? 20 : 30, 
+          scale: mobileConfig.isMobile ? 0.98 : 0.95 
         }}
         animate={isIntersecting ? { 
           opacity: 1, 
@@ -125,12 +121,10 @@ export default function PaintingFrame({
           scale: 1
         } : {}}
         transition={{ 
-          duration: isMobile ? 0.4 : 0.5,     
-          delay: (index * 0.05) * (isMobile ? 0.6 : 1),
+          duration: mobileConfig.animationDuration(0.5),     
+          delay: mobileConfig.animationDelay(index * 0.05),
           ease: "easeOut",
-          stiffness: 100,
-          damping: 30,
-          restDelta: 0.001
+          ...mobileConfig.springConfig
         }}
         whileHover={{ 
           scale: 1.015,      // Even more subtle for museum-appropriate feel
@@ -141,10 +135,10 @@ export default function PaintingFrame({
           }
         }}
         whileTap={{
-          scale: isTouchDevice ? 0.96 : 0.97,  // More pronounced feedback for touch devices
+          scale: mobileConfig.isTouch ? 0.96 : 0.97,  // More pronounced feedback for touch devices
           rotate: 0,
           transition: {
-            duration: isMobile ? 0.1 : 0.12,  // Responsive to mobile settings
+            duration: mobileConfig.animationDuration(0.12),  // Responsive to mobile settings
             type: "tween",       // Smoother than spring for memorial context
             ease: "easeOut"      // Respectful deceleration
           }
