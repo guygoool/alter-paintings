@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { Painting } from '@/types';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 // import { useMobileAnimations } from '@/hooks/useMobileAnimations';
@@ -25,30 +25,11 @@ export default function PaintingFrame({
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [naturalDimensions, setNaturalDimensions] = useState<{width: number, height: number} | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
-  const [isTouch, setIsTouch] = useState(false);
-  
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setIsTouch('ontouchstart' in window || navigator.maxTouchPoints > 0);
-    }
-  }, []);
   const { elementRef, isIntersecting } = useIntersectionObserver({
-    threshold: isMobile ? 0.2 : 0.3,
-    rootMargin: isMobile ? '0px' : '-50px',
-    triggerOnce: true, // Ensure animations only happen once
+    threshold: 0.3,
+    rootMargin: '-50px',
+    triggerOnce: true,
   });
-
-  useEffect(() => {
-    const checkIsMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    checkIsMobile();
-    window.addEventListener('resize', checkIsMobile);
-    
-    return () => window.removeEventListener('resize', checkIsMobile);
-  }, []);
 
   const calculateDimensions = useCallback((size: 'small' | 'medium' | 'large') => {
     // Use natural image dimensions if available, otherwise fall back to metadata
@@ -64,12 +45,8 @@ export default function PaintingFrame({
 
     const aspectRatio = dimensions.width / dimensions.height;
     
-    // Responsive base sizes - smaller on mobile
-    const baseSizes = isMobile ? {
-      small: 200,
-      medium: 260,
-      large: 320
-    } : {
+    // Base sizes
+    const baseSizes = {
       small: 280,
       medium: 350,
       large: 420
@@ -88,7 +65,7 @@ export default function PaintingFrame({
         height: baseSize
       };
     }
-  }, [naturalDimensions, painting.dimensions, isMobile]);
+  }, [naturalDimensions, painting.dimensions]);
 
   const frameDimensions = useMemo(() => calculateDimensions(size), [calculateDimensions, size]);
 
@@ -118,8 +95,8 @@ export default function PaintingFrame({
         ref={elementRef}
         initial={{ 
           opacity: 0, 
-          y: isMobile ? 15 : 30, 
-          scale: isMobile ? 0.98 : 0.95 
+          y: 30, 
+          scale: 0.95 
         }}
         animate={isIntersecting ? { 
           opacity: 1, 
@@ -127,12 +104,9 @@ export default function PaintingFrame({
           scale: 1
         } : {}}
         transition={{ 
-          duration: isMobile ? 0.4 : 0.5,     
-          delay: (index * 0.05) * (isMobile ? 0.7 : 1),
-          ease: "easeOut",
-          type: "spring",
-          stiffness: isMobile ? 120 : 100,
-          damping: isMobile ? 25 : 30
+          duration: 0.5,     
+          delay: index * 0.05,
+          ease: "easeOut"
         }}
         whileHover={{ 
           scale: 1.015,      // Even more subtle for museum-appropriate feel
@@ -143,10 +117,10 @@ export default function PaintingFrame({
           }
         }}
         whileTap={{
-          scale: isTouch ? 0.95 : 0.97,  // More pronounced feedback for touch devices
+          scale: 0.97,
           rotate: 0,
           transition: {
-            duration: 0.1,  // Fast response for touch
+            duration: 0.15,
             type: "tween",
             ease: "easeOut"
           }
@@ -155,7 +129,6 @@ export default function PaintingFrame({
         style={{
           width: `${frameDimensions.width}px`,
           height: `${frameDimensions.height}px`,
-          transform: `rotate(${layout === 'left' ? '2deg' : layout === 'right' ? '-2deg' : '0deg'})`,
         }}
         onClick={() => onSelect(painting)}
       >
