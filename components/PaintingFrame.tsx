@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { Painting } from '@/types';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
@@ -21,63 +21,16 @@ export default function PaintingFrame({
   index,
   onSelect
 }: PaintingFrameProps) {
-  const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
-  const [imageStartedLoading, setImageStartedLoading] = useState(false);
-  const [naturalDimensions, setNaturalDimensions] = useState<{width: number, height: number} | null>(null);
-  const imageRef = useRef<HTMLImageElement>(null);
   const { elementRef, isIntersecting } = useIntersectionObserver({
     threshold: 0.1,
     rootMargin: '100px',
     triggerOnce: true,
   });
 
-  // iOS Safari fix: Check if image is already complete (cached) or poll for completion
-  // This handles cases where onLoad doesn't fire reliably on iOS
-  useEffect(() => {
-    if (imageLoaded || imageError) return;
-
-    const checkImageComplete = () => {
-      const img = imageRef.current;
-      if (img && img.complete && img.naturalWidth > 0) {
-        setNaturalDimensions({
-          width: img.naturalWidth,
-          height: img.naturalHeight
-        });
-        setImageLoaded(true);
-        return true;
-      }
-      return false;
-    };
-
-    // Check immediately for cached images
-    if (checkImageComplete()) return;
-
-    // Poll periodically for iOS Safari where onLoad may not fire
-    const pollInterval = setInterval(() => {
-      if (checkImageComplete()) {
-        clearInterval(pollInterval);
-      }
-    }, 100);
-
-    // Fallback timeout - if image hasn't loaded after 5s, show it anyway
-    const fallbackTimeout = setTimeout(() => {
-      clearInterval(pollInterval);
-      if (!imageLoaded && !imageError) {
-        setImageLoaded(true);
-      }
-    }, 5000);
-
-    return () => {
-      clearInterval(pollInterval);
-      clearTimeout(fallbackTimeout);
-    };
-  }, [imageLoaded, imageError, isIntersecting]);
-
   const calculateDimensions = useCallback((size: 'small' | 'medium' | 'large') => {
-    // Use natural image dimensions if available, otherwise fall back to metadata
-    const dimensions = naturalDimensions || painting.dimensions;
-    
+    const dimensions = painting.dimensions;
+
     if (!dimensions) {
       return {
         small: { width: 256, height: 320 },
@@ -87,8 +40,7 @@ export default function PaintingFrame({
     }
 
     const aspectRatio = dimensions.width / dimensions.height;
-    
-    // Base sizes
+
     const baseSizes = {
       small: 280,
       medium: 350,
@@ -96,7 +48,7 @@ export default function PaintingFrame({
     };
 
     const baseSize = baseSizes[size];
-    
+
     if (aspectRatio > 1) {
       return {
         width: baseSize,
@@ -108,7 +60,7 @@ export default function PaintingFrame({
         height: baseSize
       };
     }
-  }, [naturalDimensions, painting.dimensions]);
+  }, [painting.dimensions]);
 
   const frameDimensions = useMemo(() => calculateDimensions(size), [calculateDimensions, size]);
 
@@ -118,50 +70,33 @@ export default function PaintingFrame({
     center: 'justify-center'
   };
 
-  const handleImageLoad = useCallback((event: React.SyntheticEvent<HTMLImageElement>) => {
-    const img = event.currentTarget;
-    setNaturalDimensions({
-      width: img.naturalWidth,
-      height: img.naturalHeight
-    });
-    // Small delay to ensure smooth transition
-    setTimeout(() => {
-      setImageLoaded(true);
-    }, 50);
-  }, []);
-  
   const handleImageError = useCallback(() => {
     setImageError(true);
-    setImageLoaded(true);
-  }, []);
-
-  const handleImageLoadStart = useCallback(() => {
-    setImageStartedLoading(true);
   }, []);
 
   return (
     <div className={`flex ${layoutClasses[layout]} w-full`}>
       <motion.div
         ref={elementRef}
-        initial={{ 
-          opacity: 0, 
-          y: 30, 
-          scale: 0.95 
+        initial={{
+          opacity: 0,
+          y: 30,
+          scale: 0.95
         }}
-        animate={isIntersecting ? { 
-          opacity: 1, 
-          y: 0, 
+        animate={isIntersecting ? {
+          opacity: 1,
+          y: 0,
           scale: 1
         } : {}}
-        transition={{ 
-          duration: 0.5,     
+        transition={{
+          duration: 0.5,
           delay: index * 0.05,
           ease: "easeOut"
         }}
-        whileHover={{ 
-          scale: 1.008,      // Much more subtle to prevent jumpiness
-          transition: { 
-            duration: 0.6,   // Slower, more elegant
+        whileHover={{
+          scale: 1.008,
+          transition: {
+            duration: 0.6,
             ease: "easeOut"
           }
         }}
@@ -182,50 +117,15 @@ export default function PaintingFrame({
       >
         <div className="painting-content h-full relative overflow-hidden">
           {!imageError ? (
-            <>
-              {/* Elegant skeleton loader with subtle animation */}
-              {!imageLoaded && (
-                <motion.div 
-                  className="absolute inset-0 bg-gradient-to-br from-gallery-50 via-gallery-100 to-gallery-150"
-                  initial={{ opacity: 1 }}
-                  animate={{ 
-                    opacity: imageStartedLoading ? [1, 0.7, 1] : 1
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: imageStartedLoading ? Infinity : 0,
-                    ease: "easeInOut"
-                  }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" />
-                </motion.div>
-              )}
-              
-              {/* Image with smooth fade-in */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: imageLoaded ? 1 : 0 }}
-                transition={{ 
-                  duration: 0.8, 
-                  ease: "easeOut",
-                  delay: 0.1
-                }}
-                className="absolute inset-0"
-              >
-                <Image
-                  ref={imageRef}
-                  src={painting.imageUrl}
-                  alt={painting.altText}
-                  fill
-                  className="object-cover group-hover:scale-[1.02] transition-transform duration-500 ease-out"
-                  onLoad={handleImageLoad}
-                  onError={handleImageError}
-                  onLoadStart={handleImageLoadStart}
-                  sizes="(max-width: 768px) 256px, (max-width: 1200px) 320px, 384px"
-                  priority={index < 6}
-                />
-              </motion.div>
-            </>
+            <Image
+              src={painting.imageUrl}
+              alt={painting.altText}
+              fill
+              className="object-cover group-hover:scale-[1.02] transition-transform duration-500 ease-out"
+              onError={handleImageError}
+              sizes="(max-width: 768px) 256px, (max-width: 1200px) 320px, 384px"
+              priority={index < 6}
+            />
           ) : (
             <div className="flex items-center justify-center h-full bg-gallery-100">
               <div className="text-center p-6">
@@ -239,7 +139,7 @@ export default function PaintingFrame({
             </div>
           )}
 
-          {/* Painting Info Overlay - Enhanced for mobile */}
+          {/* Painting Info Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
             <div className="text-white">
               {painting.year && (
