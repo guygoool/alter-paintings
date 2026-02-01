@@ -79,12 +79,10 @@ export default function PaintingFrame({
       <motion.div
         ref={elementRef}
         initial={{
-          opacity: 0,
           y: 30,
           scale: 0.95
         }}
         animate={isIntersecting ? {
-          opacity: 1,
           y: 0,
           scale: 1
         } : {}}
