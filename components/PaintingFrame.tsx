@@ -1,10 +1,8 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useState, useMemo, useCallback } from 'react';
 import { Painting } from '@/types';
-import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
 interface PaintingFrameProps {
   painting: Painting;
@@ -22,11 +20,6 @@ export default function PaintingFrame({
   onSelect
 }: PaintingFrameProps) {
   const [imageError, setImageError] = useState(false);
-  const { elementRef, isIntersecting } = useIntersectionObserver({
-    threshold: 0.1,
-    rootMargin: '100px',
-    triggerOnce: true,
-  });
 
   const calculateDimensions = useCallback((size: 'small' | 'medium' | 'large') => {
     const dimensions = painting.dimensions;
@@ -76,37 +69,8 @@ export default function PaintingFrame({
 
   return (
     <div className={`flex ${layoutClasses[layout]} w-full`}>
-      <motion.div
-        ref={elementRef}
-        initial={{
-          y: 30,
-          scale: 0.95
-        }}
-        animate={isIntersecting ? {
-          y: 0,
-          scale: 1
-        } : {}}
-        transition={{
-          duration: 0.5,
-          delay: index * 0.05,
-          ease: "easeOut"
-        }}
-        whileHover={{
-          scale: 1.008,
-          transition: {
-            duration: 0.6,
-            ease: "easeOut"
-          }
-        }}
-        whileTap={{
-          scale: 0.995,
-          transition: {
-            duration: 0.1,
-            type: "tween",
-            ease: "easeOut"
-          }
-        }}
-        className="group cursor-pointer museum-frame transition-all duration-300 hover:shadow-painting"
+      <div
+        className="group cursor-pointer museum-frame"
         style={{
           width: `${frameDimensions.width}px`,
           height: `${frameDimensions.height}px`,
@@ -119,7 +83,7 @@ export default function PaintingFrame({
               src={painting.imageUrl}
               alt={painting.altText}
               fill
-              className="object-cover group-hover:scale-[1.02] transition-transform duration-500 ease-out"
+              className="object-cover"
               onError={handleImageError}
               sizes="(max-width: 768px) 256px, (max-width: 1200px) 320px, 384px"
               priority={index < 6}
@@ -136,19 +100,8 @@ export default function PaintingFrame({
               </div>
             </div>
           )}
-
-          {/* Painting Info Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
-            <div className="text-white">
-              {painting.year && (
-                <span className="text-gallery-200 text-xl font-medium">{painting.year}</span>
-              )}
-            </div>
-          </div>
-
         </div>
-
-      </motion.div>
+      </div>
     </div>
   );
 }
