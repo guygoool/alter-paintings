@@ -8,7 +8,7 @@ export interface Painting {
   dimensions?: {
     width: number;
     height: number;
-    unit: 'cm' | 'in';
+    unit: 'cm' | 'in' | 'px';
   };
   medium?: string;
   tags?: string[];

@@ -14,26 +14,23 @@ interface PaintingFrameProps {
   onSelect: (painting: Painting) => void;
 }
 
-export default function PaintingFrame({ 
-  painting, 
-  layout = 'center', 
+export default function PaintingFrame({
+  painting,
+  layout = 'center',
   size = 'medium',
   index,
-  onSelect 
+  onSelect
 }: PaintingFrameProps) {
-  const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
-  const [naturalDimensions, setNaturalDimensions] = useState<{width: number, height: number} | null>(null);
   const { elementRef, isIntersecting } = useIntersectionObserver({
-    threshold: 0.3,
-    rootMargin: '-50px',
+    threshold: 0.1,
+    rootMargin: '100px',
     triggerOnce: true,
   });
 
   const calculateDimensions = useCallback((size: 'small' | 'medium' | 'large') => {
-    // Use natural image dimensions if available, otherwise fall back to metadata
-    const dimensions = naturalDimensions || painting.dimensions;
-    
+    const dimensions = painting.dimensions;
+
     if (!dimensions) {
       return {
         small: { width: 256, height: 320 },
@@ -43,8 +40,7 @@ export default function PaintingFrame({
     }
 
     const aspectRatio = dimensions.width / dimensions.height;
-    
-    // Base sizes
+
     const baseSizes = {
       small: 280,
       medium: 350,
@@ -52,7 +48,7 @@ export default function PaintingFrame({
     };
 
     const baseSize = baseSizes[size];
-    
+
     if (aspectRatio > 1) {
       return {
         width: baseSize,
@@ -64,7 +60,7 @@ export default function PaintingFrame({
         height: baseSize
       };
     }
-  }, [naturalDimensions, painting.dimensions]);
+  }, [painting.dimensions]);
 
   const frameDimensions = useMemo(() => calculateDimensions(size), [calculateDimensions, size]);
 
@@ -74,52 +70,38 @@ export default function PaintingFrame({
     center: 'justify-center'
   };
 
-  const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>) => {
-    const img = event.currentTarget;
-    setNaturalDimensions({
-      width: img.naturalWidth,
-      height: img.naturalHeight
-    });
-    setImageLoaded(true);
-  };
-  
-  const handleImageError = () => {
+  const handleImageError = useCallback(() => {
     setImageError(true);
-    setImageLoaded(true);
-  };
+  }, []);
 
   return (
     <div className={`flex ${layoutClasses[layout]} w-full`}>
       <motion.div
         ref={elementRef}
-        initial={{ 
-          opacity: 0, 
-          y: 30, 
-          scale: 0.95 
+        initial={{
+          y: 30,
+          scale: 0.95
         }}
-        animate={isIntersecting ? { 
-          opacity: 1, 
-          y: 0, 
+        animate={isIntersecting ? {
+          y: 0,
           scale: 1
         } : {}}
-        transition={{ 
-          duration: 0.5,     
+        transition={{
+          duration: 0.5,
           delay: index * 0.05,
           ease: "easeOut"
         }}
-        whileHover={{ 
-          scale: 1.015,      // Even more subtle for museum-appropriate feel
-          rotate: 0,
-          transition: { 
-            duration: 0.4,   // Slower, more deliberate
+        whileHover={{
+          scale: 1.008,
+          transition: {
+            duration: 0.6,
             ease: "easeOut"
           }
         }}
         whileTap={{
-          scale: 0.97,
-          rotate: 0,
+          scale: 0.995,
           transition: {
-            duration: 0.15,
+            duration: 0.1,
             type: "tween",
             ease: "easeOut"
           }
@@ -133,23 +115,15 @@ export default function PaintingFrame({
       >
         <div className="painting-content h-full relative overflow-hidden">
           {!imageError ? (
-            <>
-              <Image
-                src={painting.imageUrl}
-                alt={painting.altText}
-                fill
-                className={`object-cover transition-opacity duration-300 group-hover:scale-103 ${
-                  imageLoaded ? 'opacity-100' : 'opacity-0'
-                }`}
-                onLoad={handleImageLoad}
-                onError={handleImageError}
-                sizes="(max-width: 768px) 256px, (max-width: 1200px) 320px, 384px"
-              />
-              
-              {!imageLoaded && (
-                <div className="absolute inset-0 bg-gallery-100" />
-              )}
-            </>
+            <Image
+              src={painting.imageUrl}
+              alt={painting.altText}
+              fill
+              className="object-cover group-hover:scale-[1.02] transition-transform duration-500 ease-out"
+              onError={handleImageError}
+              sizes="(max-width: 768px) 256px, (max-width: 1200px) 320px, 384px"
+              priority={index < 6}
+            />
           ) : (
             <div className="flex items-center justify-center h-full bg-gallery-100">
               <div className="text-center p-6">
@@ -163,7 +137,7 @@ export default function PaintingFrame({
             </div>
           )}
 
-          {/* Painting Info Overlay - Enhanced for mobile */}
+          {/* Painting Info Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
             <div className="text-white">
               {painting.year && (

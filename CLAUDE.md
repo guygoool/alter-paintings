@@ -78,6 +78,53 @@ The gallery system is built around these core types:
 - Responsive image sizing based on painting dimensions
 - Spring physics with restDelta optimization for smooth animations
 
+### Known Issues & Fixes
+
+**iOS Safari Invisible Images Bug (Recurring)**
+
+**Symptom:** When scrolling past the first few images on iOS Safari, subsequent images are invisible but still clickable (tapping opens the modal correctly).
+
+**Root Cause:** iOS Safari's `onLoad` event for images doesn't fire reliably, especially for images that scroll into view via intersection observer. The image visibility in `PaintingFrame.tsx` depends on `imageLoaded` state which is set via `onLoad`. When `onLoad` doesn't fire, `imageLoaded` stays `false` and the image remains at `opacity: 0`.
+
+**Solution (in `PaintingFrame.tsx`):**
+1. Add a `useEffect` that polls `img.complete && img.naturalWidth > 0` every 100ms
+2. Check immediately on mount for cached images
+3. Include a 5-second fallback timeout that forces `imageLoaded: true`
+
+**Key code pattern:**
+```tsx
+useEffect(() => {
+  if (imageLoaded || imageError) return;
+
+  const checkImageComplete = () => {
+    const img = imageRef.current;
+    if (img && img.complete && img.naturalWidth > 0) {
+      setImageLoaded(true);
+      return true;
+    }
+    return false;
+  };
+
+  if (checkImageComplete()) return;
+
+  const pollInterval = setInterval(() => {
+    if (checkImageComplete()) clearInterval(pollInterval);
+  }, 100);
+
+  const fallbackTimeout = setTimeout(() => {
+    clearInterval(pollInterval);
+    if (!imageLoaded && !imageError) setImageLoaded(true);
+  }, 5000);
+
+  return () => {
+    clearInterval(pollInterval);
+    clearTimeout(fallbackTimeout);
+  };
+}, [imageLoaded, imageError, isIntersecting]);
+```
+
+**If this bug reappears:** Check that the polling mechanism in `PaintingFrame.tsx` hasn't been removed or broken. The fix must remain in place for iOS Safari compatibility.
+
 ### Design Atmosphere & Philosophy
 
 **Memorial Context:**
