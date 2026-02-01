@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { useState, useMemo, useCallback, useRef } from 'react';
+import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { Painting } from '@/types';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
@@ -14,12 +14,12 @@ interface PaintingFrameProps {
   onSelect: (painting: Painting) => void;
 }
 
-export default function PaintingFrame({ 
-  painting, 
-  layout = 'center', 
+export default function PaintingFrame({
+  painting,
+  layout = 'center',
   size = 'medium',
   index,
-  onSelect 
+  onSelect
 }: PaintingFrameProps) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
@@ -31,6 +31,48 @@ export default function PaintingFrame({
     rootMargin: '100px',
     triggerOnce: true,
   });
+
+  // iOS Safari fix: Check if image is already complete (cached) or poll for completion
+  // This handles cases where onLoad doesn't fire reliably on iOS
+  useEffect(() => {
+    if (imageLoaded || imageError) return;
+
+    const checkImageComplete = () => {
+      const img = imageRef.current;
+      if (img && img.complete && img.naturalWidth > 0) {
+        setNaturalDimensions({
+          width: img.naturalWidth,
+          height: img.naturalHeight
+        });
+        setImageLoaded(true);
+        return true;
+      }
+      return false;
+    };
+
+    // Check immediately for cached images
+    if (checkImageComplete()) return;
+
+    // Poll periodically for iOS Safari where onLoad may not fire
+    const pollInterval = setInterval(() => {
+      if (checkImageComplete()) {
+        clearInterval(pollInterval);
+      }
+    }, 100);
+
+    // Fallback timeout - if image hasn't loaded after 5s, show it anyway
+    const fallbackTimeout = setTimeout(() => {
+      clearInterval(pollInterval);
+      if (!imageLoaded && !imageError) {
+        setImageLoaded(true);
+      }
+    }, 5000);
+
+    return () => {
+      clearInterval(pollInterval);
+      clearTimeout(fallbackTimeout);
+    };
+  }, [imageLoaded, imageError, isIntersecting]);
 
   const calculateDimensions = useCallback((size: 'small' | 'medium' | 'large') => {
     // Use natural image dimensions if available, otherwise fall back to metadata
