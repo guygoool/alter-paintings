@@ -13,33 +13,30 @@ interface GallerySectionProps {
 
 // Optimized animation variants for better performance
 const containerVariants = {
-  hidden: { opacity: 0 },
+  hidden: {},
   visible: {
-    opacity: 1,
     transition: {
-      staggerChildren: 0.04, // Reduced from 0.08 for faster reveal
-      delayChildren: 0.1,    // Reduced from 0.2
-      duration: 0.4,         // Reduced from 0.6
+      staggerChildren: 0.04,
+      delayChildren: 0.1,
+      duration: 0.4,
     },
   },
 };
 
 const itemVariants = {
-  hidden: { 
-    opacity: 0, 
-    y: 40,              // Reduced from 80 for subtler movement
-    scale: 0.98,        // Reduced from 0.95 for subtler scaling
+  hidden: {
+    y: 40,
+    scale: 0.98,
   },
-  visible: { 
-    opacity: 1, 
+  visible: {
     y: 0,
     scale: 1,
     transition: {
       type: 'spring' as const,
-      damping: 30,      // Increased for faster settling
-      stiffness: 100,   // Reduced for smoother motion
-      restDelta: 0.001, // Added for better performance
-      duration: 0.5,    // Reduced from 0.8
+      damping: 30,
+      stiffness: 100,
+      restDelta: 0.001,
+      duration: 0.5,
     },
   },
 };
