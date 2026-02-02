@@ -116,10 +116,9 @@ export default function HeroSection({ featuredPaintings, onScrollToGallery }: He
                 {/* Main Featured Painting */}
                 <motion.div
                   key={currentPainting?.id}
-                  initial={{ opacity: 0, scale: 0.8, rotate: -15 }}
-                  animate={{ 
-                    opacity: 1, 
-                    scale: 1, 
+                  initial={{ scale: 0.8, rotate: -15 }}
+                  animate={{
+                    scale: 1,
                     rotate: [2, 4, 0, 2],
                   }}
                   className="absolute top-8 left-8 w-80 h-96 z-30 museum-frame"
@@ -143,12 +142,12 @@ export default function HeroSection({ featuredPaintings, onScrollToGallery }: He
                 {featuredPaintings.slice(1, 3).map((painting, index) => (
                   <motion.div
                     key={painting.id}
-                    initial={{ opacity: 0, scale: 0.8, rotate: -15 }}
+                    initial={{ scale: 0.8, rotate: -15 }}
                     animate={{
-                      opacity: 0.8,
                       scale: 1,
                       rotate: index === 0 ? [-8, -6, -10, -8] : [5, 7, 3, 5],
                     }}
+                    style={{ opacity: 0.8 }}
                     className={`absolute museum-frame ${
                       index === 0 ? 'top-32 right-4 w-48 h-64 z-20' : 'bottom-16 left-16 w-56 h-72 z-10'
                     }`}
