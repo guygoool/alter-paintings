@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useState, useMemo, useCallback } from 'react';
 import { Painting } from '@/types';
 
@@ -62,39 +63,53 @@ export default function PaintingFrame({
     center: 'justify-center'
   };
 
+  const handleImageError = useCallback(() => {
+    setImageError(true);
+  }, []);
+
   return (
     <div className={`flex ${layoutClasses[layout]} w-full`}>
       <div
+        className="group cursor-pointer museum-frame transition-all duration-300 hover:shadow-painting"
         style={{
           width: `${frameDimensions.width}px`,
           height: `${frameDimensions.height}px`,
-          cursor: 'pointer',
         }}
         onClick={() => onSelect(painting)}
       >
-        {!imageError ? (
-          <img
-            src={painting.imageUrl}
-            alt={painting.altText}
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-            }}
-            onError={() => setImageError(true)}
-          />
-        ) : (
-          <div style={{
-            width: '100%',
-            height: '100%',
-            backgroundColor: '#f0f0f0',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
-            Image Unavailable
+        <div className="painting-content h-full relative overflow-hidden">
+          {!imageError ? (
+            <Image
+              src={painting.imageUrl}
+              alt={painting.altText}
+              fill
+              className="object-cover group-hover:scale-[1.02] transition-transform duration-500 ease-out"
+              onError={handleImageError}
+              sizes="(max-width: 768px) 256px, (max-width: 1200px) 320px, 384px"
+              priority={index < 6}
+            />
+          ) : (
+            <div className="flex items-center justify-center h-full bg-gallery-100">
+              <div className="text-center p-6">
+                <div className="w-16 h-16 mx-auto mb-4 bg-gallery-200 rounded-full flex items-center justify-center">
+                  <svg className="w-8 h-8 text-gallery-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <p className="text-sm text-gallery-500 font-medium">Image Unavailable</p>
+              </div>
+            </div>
+          )}
+
+          {/* Painting Info Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+            <div className="text-white">
+              {painting.year && (
+                <span className="text-gallery-200 text-xl font-medium">{painting.year}</span>
+              )}
+            </div>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
