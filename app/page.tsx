@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { alterMetzgerGallery, generateLoopedPaintings, shuffleArray } from '@/utils/galleryData';
+import { alterMetzgerGallery, generateLoopedPaintings, shufflePaintings } from '@/utils/galleryData';
 import HeroSection from '@/components/HeroSection';
 import GallerySection from '@/components/GallerySection';
 import PaintingModal from '@/components/PaintingModal';
@@ -14,7 +14,7 @@ const basePaintings = [
 ];
 
 export default function Home() {
-  const [allPaintings] = useState<Painting[]>(() => shuffleArray(basePaintings));
+  const [allPaintings] = useState<Painting[]>(() => shufflePaintings(basePaintings));
   const [selectedPainting, setSelectedPainting] = useState<Painting | null>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
 
