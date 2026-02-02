@@ -229,15 +229,6 @@ export const realPaintings: Painting[] = [
     tags: ['portrait']
   },
   {
-    id: 25,
-    title: 'Man with Glasses',
-    imageUrl: '/images/man-with-glasses.jpg',
-    altText: 'Portrait of man wearing glasses',
-    dimensions: { width: 1423, height: 1759, unit: 'px' },
-    medium: 'Oil on canvas',
-    tags: ['portrait']
-  },
-  {
     id: 26,
     title: 'Man with Turban',
     imageUrl: '/images/man-with-turban.jpg',
