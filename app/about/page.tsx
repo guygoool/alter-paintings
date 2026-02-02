@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function AboutPage() {
@@ -89,6 +90,29 @@ export default function AboutPage() {
                 </p>
               </div>
 
+            </motion.div>
+
+            {/* Portrait of Alter Metzger */}
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              className="mt-20 flex flex-col items-center"
+            >
+              <div className="museum-frame max-w-sm">
+                <div className="painting-content">
+                  <Image
+                    src="/images/alter.jpg"
+                    alt="Portrait of Alter Metzger"
+                    width={1423}
+                    height={1759}
+                    className="w-full h-auto"
+                  />
+                </div>
+              </div>
+              <p className="mt-6 text-sm text-artist-warm-gray font-crimson italic">
+                Portrait of Alter Metzger
+              </p>
             </motion.div>
 
             {/* Gallery link with same styling as gallery footer */}
