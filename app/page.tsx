@@ -2,18 +2,19 @@
 
 import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { alterMetzgerGallery, generateLoopedPaintings } from '@/utils/galleryData';
+import { alterMetzgerGallery, generateLoopedPaintings, shuffleArray } from '@/utils/galleryData';
 import HeroSection from '@/components/HeroSection';
 import GallerySection from '@/components/GallerySection';
 import PaintingModal from '@/components/PaintingModal';
 import { Painting } from '@/types';
 
-const allPaintings = [
+const basePaintings = [
   ...alterMetzgerGallery.paintings,
   ...generateLoopedPaintings(40)
 ];
 
 export default function Home() {
+  const [allPaintings] = useState<Painting[]>(() => shuffleArray(basePaintings));
   const [selectedPainting, setSelectedPainting] = useState<Painting | null>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
 
