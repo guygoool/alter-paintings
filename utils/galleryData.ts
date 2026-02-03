@@ -433,6 +433,21 @@ export const shufflePaintings = (paintings: Painting[]): Painting[] => {
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
 
+  // Ensure the first 3 paintings (hero section) have unique images
+  const heroCount = 3;
+  for (let i = 1; i < heroCount; i++) {
+    const seenUrls = new Set(shuffled.slice(0, i).map(p => p.imageUrl));
+    if (seenUrls.has(shuffled[i].imageUrl)) {
+      // Find a painting with a unique image to swap
+      for (let k = heroCount; k < shuffled.length; k++) {
+        if (!seenUrls.has(shuffled[k].imageUrl)) {
+          [shuffled[i], shuffled[k]] = [shuffled[k], shuffled[i]];
+          break;
+        }
+      }
+    }
+  }
+
   // Ensure minimum spacing between paintings with the same image
   const minSpacing = Math.min(5, Math.floor(shuffled.length / realPaintings.length) - 1);
 
