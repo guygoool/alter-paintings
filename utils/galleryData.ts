@@ -424,11 +424,66 @@ export const generateLoopedPaintings = (count: number): Painting[] => {
   });
 };
 
-export const shuffleArray = <T>(array: T[]): T[] => {
-  const shuffled = [...array];
+export const shufflePaintings = (paintings: Painting[]): Painting[] => {
+  const shuffled = [...paintings];
+
+  // Fisher-Yates shuffle
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
-  return shuffled;
+
+  // Ensure the first 3 paintings (hero section) have unique images
+  const heroCount = 3;
+  for (let i = 1; i < heroCount; i++) {
+    const seenUrls = new Set(shuffled.slice(0, i).map(p => p.imageUrl));
+    if (seenUrls.has(shuffled[i].imageUrl)) {
+      // Find a painting with a unique image to swap
+      for (let k = heroCount; k < shuffled.length; k++) {
+        if (!seenUrls.has(shuffled[k].imageUrl)) {
+          [shuffled[i], shuffled[k]] = [shuffled[k], shuffled[i]];
+          break;
+        }
+      }
+    }
+  }
+
+  // Move hero paintings to the end so gallery doesn't start with them
+  const heroPaintings = shuffled.splice(0, heroCount);
+
+  // Ensure minimum spacing between paintings with the same image
+  const minSpacing = Math.min(5, Math.floor(shuffled.length / realPaintings.length) - 1);
+
+  for (let i = 0; i < shuffled.length; i++) {
+    const currentUrl = shuffled[i].imageUrl;
+
+    // Check if any painting within minSpacing has the same image
+    for (let j = i + 1; j <= i + minSpacing && j < shuffled.length; j++) {
+      if (shuffled[j].imageUrl === currentUrl) {
+        // Find a suitable swap candidate further away
+        let swapped = false;
+        for (let k = j + minSpacing; k < shuffled.length && !swapped; k++) {
+          // Check if swapping would not create a new conflict
+          const candidateUrl = shuffled[k].imageUrl;
+          let canSwap = true;
+
+          // Check if candidate would conflict at position j
+          for (let check = Math.max(0, j - minSpacing); check <= Math.min(shuffled.length - 1, j + minSpacing); check++) {
+            if (check !== j && check !== k && shuffled[check].imageUrl === candidateUrl) {
+              canSwap = false;
+              break;
+            }
+          }
+
+          if (canSwap) {
+            [shuffled[j], shuffled[k]] = [shuffled[k], shuffled[j]];
+            swapped = true;
+          }
+        }
+      }
+    }
+  }
+
+  // Append hero paintings at the end
+  return [...shuffled, ...heroPaintings];
 };
