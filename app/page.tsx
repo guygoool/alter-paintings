@@ -35,16 +35,16 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gallery-50">
-      {/* Hero Section */}
-      <HeroSection 
-        featuredPaintings={allPaintings.slice(0, 3)}
+      {/* Hero Section - uses last 3 paintings (unique, moved to end by shuffle) */}
+      <HeroSection
+        featuredPaintings={allPaintings.slice(-3)}
         onScrollToGallery={handleScrollToGallery}
       />
 
-      {/* Gallery Section */}
+      {/* Gallery Section - excludes hero paintings */}
       <div ref={galleryRef}>
-        <GallerySection 
-          paintings={allPaintings}
+        <GallerySection
+          paintings={allPaintings.slice(0, -3)}
           onSelectPainting={handleSelectPainting}
         />
       </div>

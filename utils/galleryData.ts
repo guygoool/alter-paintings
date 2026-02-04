@@ -448,6 +448,9 @@ export const shufflePaintings = (paintings: Painting[]): Painting[] => {
     }
   }
 
+  // Move hero paintings to the end so gallery doesn't start with them
+  const heroPaintings = shuffled.splice(0, heroCount);
+
   // Ensure minimum spacing between paintings with the same image
   const minSpacing = Math.min(5, Math.floor(shuffled.length / realPaintings.length) - 1);
 
@@ -481,5 +484,6 @@ export const shufflePaintings = (paintings: Painting[]): Painting[] => {
     }
   }
 
-  return shuffled;
+  // Append hero paintings at the end
+  return [...shuffled, ...heroPaintings];
 };
